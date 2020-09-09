@@ -1,0 +1,11 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.list {
+  @include resetList;
+
+  position: relative;
+  display: grid;
+  grid-gap: 0.7rem;
+  margin-top: 0.5rem;
+}

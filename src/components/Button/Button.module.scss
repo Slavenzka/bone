@@ -1,0 +1,56 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.button {
+  @include resetButton;
+  display: block;
+}
+
+.buttonBasic {
+  @include fontButton;
+
+  padding: 2.1rem 2rem 2rem 2rem;
+  width: 100%;
+  background-color: $colorHighlight;
+  box-shadow: $shadowButton;
+}
+
+.buttonBordered {
+  @include fontMenu;
+
+  padding: 0.8rem 2.6rem 0.9rem 2.6rem;
+  background-color: $colorBgMain;
+  transition-duration: $transitionDuration;
+
+  &:hover {
+    background-color: $colorBgDarker;
+    color: $colorFontDarker1;
+  }
+}
+
+.buttonBurger {
+  position: relative;
+  width: 3rem;
+  height: 3rem;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0.8rem;
+    left: calc(50% - 1.5rem / 2);
+    width: 1.5rem;
+    height: 0.1rem;
+    background-color: $colorHighlight;
+    box-shadow: 0 1.2rem 0 0 $colorHighlight;
+  }
+
+  &::after {
+    content: "";
+    position: absolute;
+    top: 1.4rem;
+    left: calc(50% - 1.5rem / 2);
+    width: 1rem;
+    height: 0.1rem;
+    background-color: $colorHighlight;
+  }
+}

@@ -1,0 +1,52 @@
+@import "mixins";
+@import "fonts";
+@import "variables";
+
+html {
+  font-size: 10px;
+  //overflow: auto;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: $colorBgMain;
+  //overflow: hidden;
+
+  .simplebar-track.simplebar-horizontal {
+    bottom: 1rem;
+    height: 0.3rem;
+  }
+
+  .simplebar-scrollbar.simplebar-visible::before {
+    background: $colorScrollbar;
+    opacity: 1;
+  }
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  outline: none;
+}
+
+a {
+  text-decoration: none;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  border: 0;
+  padding: 0;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+  font-size: 0;
+}
+
+.ReactCollapse--collapse {
+  transition: height 500ms;
+}

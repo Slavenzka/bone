@@ -1,0 +1,147 @@
+@import "variables";
+
+// font mixins
+@mixin h1 {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 3rem;
+  font-weight: 600;
+  line-height: 3.9rem;
+  color: $colorFontDarker1;
+}
+
+@mixin fontLogo {
+  font-family: 'SF Pro Display', Arial, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 500;
+  line-height: 1.5rem;
+  color: $colorFontDarker2;
+  letter-spacing: 0.65rem;
+  text-transform: uppercase;
+}
+
+@mixin fontMenu($weight: 400, $color: $colorFontDarker3) {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 1.3rem;
+  font-weight: $weight;
+  line-height: 1.8rem;
+  color: $color;
+}
+
+@mixin fontKey {
+  font-family: 'SF Pro Display', Arial, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 300;
+  line-height: 1.9rem;
+  color: $colorFontDarker3;
+}
+
+@mixin fontValue {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+  line-height: 2.4rem;
+  color: $colorFontDarker2;
+}
+
+@mixin fontSelect($color: $colorFontDarker3, $weight: 400) {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 1.5rem;
+  font-weight: $weight;
+  line-height: 2rem;
+  color: $color;
+}
+
+@mixin fontHint($weight: 400, $color: $colorFontDarker3) {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 1.2rem;
+  font-weight: $weight;
+  line-height: 2.4rem;
+  color: $color;
+}
+
+@mixin fontLabel {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 1.4rem;
+  font-weight: 400;
+  line-height: 1.9rem;
+  color: $colorFontDarker3;
+}
+
+@mixin colorFontSelectable($color, $weight: 300) {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 1.2rem;
+  font-weight: $weight;
+  line-height: 1.6rem;
+  color: $color;
+}
+
+@mixin fontButton {
+  font-family: 'SF Pro Display', Arial, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 500;
+  line-height: 1.9rem;
+  color: $colorLightest;
+}
+
+@mixin fontResult {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  line-height: 2.1rem;
+  color: $colorFontTotal;
+}
+
+@mixin fontNavigation {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 1.3rem;
+  font-weight: 400;
+  line-height: 2.4rem;
+  color: $colorFontTotal;
+}
+
+@mixin fontTag {
+  font-family: 'SF Pro Display', Arial, sans-serif;
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.3rem;
+  color: $colorLightest;
+}
+
+// reset mixins
+
+@mixin resetButton {
+  margin: 0;
+  padding: 0;
+  font-size: 0;
+  background-color: transparent;
+  border: none;
+  box-shadow: none;
+  border-radius: 0;
+  cursor: pointer;
+}
+
+@mixin resetList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+@mixin resetFieldset {
+  margin: 0;
+  padding: 0;
+  border: none;
+}
+
+// style mixins
+@mixin link {
+  transition-duration: $transitionDuration;
+
+  &:hover,
+  &:active {
+   opacity: 0.5;
+  }
+
+  &:active {
+    opacity: 0.5;
+  }
+}

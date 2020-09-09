@@ -1,0 +1,17 @@
+@import "styles/variables";
+
+.wrapper {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  border-radius: 50%;
+}
+
+.icon {
+  width: 2.5rem;
+  fill: $colorBorderPassive;
+  opacity: 0.3;
+}

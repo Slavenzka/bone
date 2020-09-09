@@ -1,0 +1,26 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.heading {
+  margin: 0;
+}
+
+.headingMain {
+  @include h1;
+}
+
+.headingLightest {
+  color: $colorLightest;
+}
+
+.headingDark {
+  color: $colorFontDarker3;
+}
+
+.headingMedium {
+  @include fontLabel;
+}
+
+.headingSmall {
+  @include fontKey;
+}

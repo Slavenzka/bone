@@ -1,0 +1,90 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.wrapper {
+  padding-bottom: 6rem;
+
+  .button {
+    margin-top: 4rem;
+  }
+}
+
+.currencies {
+  position: relative;
+}
+
+.item {
+  &:not(:first-child) {
+    margin-top: 1.5rem;
+  }
+}
+
+.buttonToggle {
+  @include resetButton;
+
+  position: absolute;
+  top: 10.5rem;
+  left: calc(50% - 3.5rem / 2);
+  width: 4rem;
+  height: 4rem;
+  background-color: $colorBgMain;
+  border-radius: 50%;
+  transition-duration: $transitionDuration;
+
+  &:hover {
+    .icon {
+      stroke: $colorFontDarker1;
+    }
+  }
+}
+
+.icon {
+  width: 2rem;
+  stroke: $colorHighlight;
+  transition-duration: $transitionDuration;
+}
+
+.buttonCollapse {
+  @include resetButton;
+  @include fontMenu(400, $colorFontDarker1);
+
+  margin-top: 3.3rem;
+  border-bottom: 0.1rem dashed $colorBorderDark;
+  transition-duration: $transitionDuration;
+
+  &:hover {
+    color: $colorHighlight;
+    border-bottom-color: transparent;
+  }
+}
+
+.collapseContent {
+  padding-top: 1.7rem;
+}
+
+.settings {
+  &:not(:first-child) {
+    margin-top: 2rem;
+  }
+
+  &:last-child {
+    position: relative;
+    padding-bottom: 3rem;
+
+    &::before {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      right: calc(-1 * var(--padding-h-inner));
+      width: 150vw;
+      height: 0.1rem;
+      background-color: $colorBorderMain;
+    }
+  }
+}
+
+@media (max-width: $adaptiveMax) {
+  .wrapper {
+    padding-bottom: 5rem;
+  }
+}

@@ -1,0 +1,52 @@
+// screen sizes
+$adaptiveMax: 1279px;
+
+// colors
+  // fonts
+$colorFontDarker1: rgb(24, 24, 24);
+$colorFontDarker2: rgb(46, 46, 46);
+$colorFontDarker3: rgba(46, 46, 46, 0.5);
+$colorFontDarker4: rgba(24, 24, 24, 0.4);
+$colorFontDarker5: rgba(24, 24, 24, 0.3);
+$colorFontTotal: rgba(24, 24, 24, 0.8);
+
+  // backgrounds
+$colorBgMain: rgb(237, 235, 223);
+$colorBgBest: rgba(237, 235, 223, 0.9);
+$colorBgLighter: rgba(237, 235, 223, 0.5);
+$colorBgDarker: rgb(225, 216, 199);
+
+$colorBgLight: rgb(24, 24, 24);
+$colorBgAux: rgb(195, 176, 145);
+$colorBgPassive: rgba(195, 176, 145, 0.2);
+$colorBgActive: rgba(195, 176, 145, 0.4);
+$colorBgTag: rgb(191, 175, 150);
+  // common
+$colorLightest: rgb(255, 255, 255);
+$colorHighlight: rgb(168, 150, 101);
+
+  // borders
+$colorBorderMain: rgba(31, 31, 31, 0.08);
+$colorBorderPassive: rgb(151, 151, 151);
+$colorBorderActive: rgba(248, 148, 30, 0.4);
+$colorBorderDark: rgb(149, 136, 115);
+
+  // shadows
+$shadowControl: 0 0.2rem 2rem 0 rgba(224, 89, 75, 0.65);
+$shadowButton: 0 0.2rem 2rem 0 rgba(44, 44, 44, 0.09);
+
+  // misc
+$colorScrollbar: rgb(156, 156, 156);
+
+// transitions
+$transitionDuration: 0.3s;
+
+// spaces
+:root {
+  --padding-h-inner: 6.2rem;
+  --padding-h-elements: 2rem;
+
+  @media (max-width: $adaptiveMax) {
+    --padding-h-inner: 2rem;
+  }
+}

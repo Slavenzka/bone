@@ -1,0 +1,44 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.heading {
+  text-align: center;
+}
+
+.list {
+  @include resetList;
+
+  margin-top: 4.6rem;
+  border-top: 0.1rem solid $colorBorderMain;
+  border-bottom: 0.1rem solid $colorBorderMain;
+}
+
+.item {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 17rem;
+
+  &:not(:last-child) {
+    border-bottom: 0.1rem solid $colorBorderMain;
+  }
+
+  span {
+    color: white;
+  }
+
+  .icon {
+    width: 17rem;
+    fill: $colorLightest;
+    opacity: 0.5;
+    transition-duration: $transitionDuration;
+  }
+}
+
+.link {
+  &:hover {
+    .icon {
+      opacity: 1;
+    }
+  }
+}

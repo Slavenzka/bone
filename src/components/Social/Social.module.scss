@@ -1,0 +1,44 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.list {
+  @include resetList;
+
+  display: flex;
+  align-items: center;
+
+}
+
+.item {
+  &:not(:first-child) {
+    margin-left: 2rem;
+  }
+}
+
+.link {
+  font-size: 0;
+
+  &:hover {
+    .icon {
+      fill: $colorFontDarker2;
+    }
+  }
+}
+
+.icon {
+  width: 4rem;
+  fill: var(--colorSocialIcon);
+  transition-duration: $transitionDuration;
+}
+
+.iconInner {
+  fill: var(--colorBgAside);
+  transition-duration: $transitionDuration;
+}
+
+@media (max-width: $adaptiveMax) {
+  .list {
+    justify-content: center;
+    padding: 4rem 0 2.7rem 0;
+  }
+}

@@ -1,0 +1,16 @@
+@import "styles/variables";
+
+.container {
+  margin: 0 auto;
+  padding: 0 calc(4 / 136.6 * 100%);
+}
+
+.containerInner {
+  padding: 0 var(--padding-h-inner);
+}
+
+@media (max-width: $adaptiveMax) {
+  .container {
+    padding: 0;
+  }
+}

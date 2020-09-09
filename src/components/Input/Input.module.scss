@@ -1,0 +1,23 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.input {
+  @include colorFontSelectable($colorFontDarker2);
+
+  padding: 0.6rem 1rem 0.8rem 1rem;
+  width: 100%;
+  height: 3rem;
+  background-color: transparent;
+  border: 0.1rem solid $colorBgPassive;
+  border-radius: 0.4rem;
+  transition-duration: $transitionDuration;
+
+  &:hover,
+  &:focus {
+    border-color: $colorBorderActive;
+  }
+
+  &::placeholder {
+    color: $colorFontDarker3;
+  }
+}

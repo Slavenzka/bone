@@ -1,0 +1,46 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  padding: 0;
+}
+
+.key {
+  grid-column: 1 / -1;
+  grid-row: 1 / 2;
+
+  color: $colorFontDarker1;
+}
+
+.content {
+  grid-column: 1 / -1;
+
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.7rem;
+  padding: 2.1rem 2rem 1.8rem 2rem;
+  background-color: $colorLightest;
+}
+
+.value {
+  @include fontValue;
+
+  margin: 0;
+}
+
+.select {
+  margin-left: auto;
+}
+
+.legend {
+  @include fontHint;
+
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0;
+  width: 100%;
+}

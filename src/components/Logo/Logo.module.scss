@@ -1,0 +1,15 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.logo {
+  @include fontLogo;
+
+  margin: 0;
+}
+
+.icon {
+  width: 5.5rem;
+  fill: $colorFontDarker1;
+  stroke: $colorFontDarker1;
+  opacity: 0.9;
+}

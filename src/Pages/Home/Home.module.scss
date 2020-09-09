@@ -1,0 +1,123 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.wrapper {
+  display: grid;
+  grid-template-columns: 46.9rem 1fr;
+
+  .themeLight {
+    --colorBgAside: rgb(225, 216, 199);
+    --colorFontNavigation: rgba(46, 46, 46, 0.5);
+    --colorBgHighlight: rgba(237, 235, 223, 0.5);
+    --colorFontMain: rgba(24, 24, 24, 0.8);
+    --tableRowBgOrdinary: rgba(237, 235, 223, 0.5);
+    --tableRowBgBest: rgba(237, 235, 223, 0.9);
+    --colorFontTableHeading: rgba(24, 24, 24, 0.3);
+    --colorFontTableOrdinary: rgba(24, 24, 24, 0.8);
+    --colorFontTableBest: rgba(24, 24, 24, 0.8);
+    --colorFontFooterNav: rgba(24, 24, 24, 0.6);
+    --colorSocialIcon: rgb(195, 176, 145);
+  }
+
+  .themeDark {
+    --colorBgAside: rgb(34, 34, 34);
+    --colorFontNavigation: rgba(255, 255, 255, 0.5);
+    --colorBgHighlight: rgba(237, 235, 223, 0.07);
+    --colorFontMain: rgba(255, 255, 255, 0.8);
+    --tableRowBgOrdinary: rgba(237, 235, 223, 0.07);
+    --tableRowBgBest: rgba(237, 235, 223, 0.13);
+    --colorFontTableHeading: rgba(255, 255, 255, 0.3);
+    --colorFontTableOrdinary: rgba(255, 255, 255, 0.6);
+    --colorFontTableBest: rgba(255, 255, 255, 0.8);
+    --colorFontFooterNav: rgba(255, 255, 255, 0.5);
+    --colorSocialIcon: rgba(195, 176, 145, 0.4);
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 2.6rem 0;
+}
+
+.calculator {
+  position: relative;
+  min-height: 100%;
+}
+
+.selectLang {
+  margin-left: auto;
+}
+
+.content {
+  padding-top: 2.7rem;
+}
+
+.form {
+  margin-top: 2.8rem;
+}
+
+.navigation {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100vh;
+  background-color: var(--colorBgAside);
+  transition-duration: $transitionDuration;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 100%;
+    width: 3.999rem;
+    height: 100%;
+    background-color: var(--colorBgAside);
+    transition-duration: $transitionDuration;
+  }
+}
+
+.summary {
+  margin-bottom: 6rem;
+}
+
+.footer {
+  margin-top: auto;
+}
+
+@media (max-width: $adaptiveMax) {
+  .wrapper {
+    display: block;
+
+    .header {
+      padding: 3.5rem 0;
+    }
+
+    .buttonScroll {
+      @include resetButton;
+      @include fontMenu(500, $colorLightest);
+
+      margin-right: 3rem;
+      margin-left: auto;
+      opacity: 0.6;
+    }
+
+    .buttonBurger {
+      margin-left: 2rem;
+    }
+  }
+
+  .calculator {
+    position: static;
+    overflow: auto;
+  }
+
+
+  .navigation {
+    &::before {
+      display: none;
+    }
+  }
+}
