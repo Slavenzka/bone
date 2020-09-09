@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/bone/static/css/main.56b64d94.chunk.css",
+    "main.js": "/bone/static/js/main.5245d1b6.chunk.js",
+    "main.js.map": "/bone/static/js/main.5245d1b6.chunk.js.map",
+    "runtime-main.js": "/bone/static/js/runtime-main.18dfc53f.js",
+    "runtime-main.js.map": "/bone/static/js/runtime-main.18dfc53f.js.map",
+    "static/css/2.769dd305.chunk.css": "/bone/static/css/2.769dd305.chunk.css",
+    "static/js/2.962e6611.chunk.js": "/bone/static/js/2.962e6611.chunk.js",
+    "static/js/2.962e6611.chunk.js.map": "/bone/static/js/2.962e6611.chunk.js.map",
+    "index.html": "/bone/index.html",
+    "precache-manifest.bf006d93ff13076ee115d1927221a157.js": "/bone/precache-manifest.bf006d93ff13076ee115d1927221a157.js",
+    "service-worker.js": "/bone/service-worker.js",
+    "static/css/2.769dd305.chunk.css.map": "/bone/static/css/2.769dd305.chunk.css.map",
+    "static/css/main.56b64d94.chunk.css.map": "/bone/static/css/main.56b64d94.chunk.css.map",
+    "static/js/2.962e6611.chunk.js.LICENSE.txt": "/bone/static/js/2.962e6611.chunk.js.LICENSE.txt",
+    "static/media/common.scss": "/bone/static/media/SFProDisplay-Regular.abe60269.woff2"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.18dfc53f.js",
+    "static/css/2.769dd305.chunk.css",
+    "static/js/2.962e6611.chunk.js",
+    "static/css/main.56b64d94.chunk.css",
+    "static/js/main.5245d1b6.chunk.js"
+  ]
+}
