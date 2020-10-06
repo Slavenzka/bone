@@ -10,10 +10,12 @@ import App from 'App'
 import thunk from 'redux-thunk'
 import { HashRouter } from 'react-router-dom'
 import { uiReducer } from 'store/reducers/ui'
+import { dataReducer } from 'store/reducers/data'
 
 const rootReducer = combineReducers({
   elastic: elasticAdaptive,
-  ui: uiReducer
+  ui: uiReducer,
+  data: dataReducer
 })
 
 const store = createStore(rootReducer,applyMiddleware(thunk))

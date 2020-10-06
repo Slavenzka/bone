@@ -1,0 +1,35 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.option {
+  display: flex;
+  align-items: center;
+  padding: 1.5rem 0;
+  background-color: $colorBgLight;
+  border-bottom: 1px solid $colorBorderMain;
+
+  &:hover {
+    .descriptor {
+      color: $colorHighlight;
+    }
+  }
+}
+
+.descriptor {
+  @include fontMenu(400, $colorLightest);
+
+  margin: 0;
+  transition-duration: $transitionDuration;
+}
+
+.value {
+  @include fontButton;
+
+  margin: 0 0 0 auto;
+}
+
+.icon {
+  margin-left: 0.7rem;
+  width: 2rem;
+  fill: $colorFontDarker4;
+}

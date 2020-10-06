@@ -2,6 +2,7 @@
 @import "styles/mixins";
 
 .heading {
+  color: $colorLightest;
   text-align: center;
 }
 
@@ -35,7 +36,9 @@
   }
 }
 
-.link {
+.button {
+  @include resetButton;
+
   &:hover {
     .icon {
       opacity: 1;

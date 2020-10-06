@@ -2,15 +2,19 @@
 @import "styles/mixins";
 
 .input {
+  width: 100%;
+  height: 100%;
+  transition-duration: $transitionDuration;
+}
+
+.inputCustomization {
   @include colorFontSelectable($colorFontDarker2);
 
   padding: 0.6rem 1rem 0.8rem 1rem;
-  width: 100%;
   height: 3rem;
   background-color: transparent;
   border: 0.1rem solid $colorBgPassive;
   border-radius: 0.4rem;
-  transition-duration: $transitionDuration;
 
   &:hover,
   &:focus {
@@ -20,4 +24,12 @@
   &::placeholder {
     color: $colorFontDarker3;
   }
+}
+
+.inputCalculator {
+  @include fontValue;
+
+  padding: 0;
+  background-color: transparent;
+  border: none;
 }

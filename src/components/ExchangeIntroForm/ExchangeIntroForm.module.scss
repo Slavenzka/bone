@@ -9,39 +9,15 @@
   }
 }
 
+.preloader {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 25rem;
+}
+
 .currencies {
   position: relative;
-}
-
-.item {
-  &:not(:first-child) {
-    margin-top: 1.5rem;
-  }
-}
-
-.buttonToggle {
-  @include resetButton;
-
-  position: absolute;
-  top: 10.5rem;
-  left: calc(50% - 3.5rem / 2);
-  width: 4rem;
-  height: 4rem;
-  background-color: $colorBgMain;
-  border-radius: 50%;
-  transition-duration: $transitionDuration;
-
-  &:hover {
-    .icon {
-      stroke: $colorFontDarker1;
-    }
-  }
-}
-
-.icon {
-  width: 2rem;
-  stroke: $colorHighlight;
-  transition-duration: $transitionDuration;
 }
 
 .buttonCollapse {

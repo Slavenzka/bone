@@ -6,7 +6,7 @@
   align-items: center;
 }
 
-.select {
+.selectCurrency {
   width: max-content;
 
   :global {
@@ -22,9 +22,17 @@
       }
 
       &__value-container {
-        min-width: 5rem;
+        min-width: 6rem;
         min-height: 1.6rem;
         padding: 0 0.7rem 0 0.5rem;
+      }
+
+      &__menu {
+        top: 4rem;
+        right: calc(-1 * var(--padding-h-elements));
+        width: 34.5rem;
+        background-color: $colorBgLight;
+        border-radius: 0.4rem;
       }
 
       &__placeholder {
@@ -55,15 +63,16 @@
       &__option {
         @include fontValue;
 
-        padding: 0.5rem 0.2rem 0.5rem 0.5rem;
+        padding: 0;
+        border: none;
 
         &:hover,
         &--is-focused {
-          background-color: $colorHighlight;
+          color: red;
         }
 
         &--is-selected {
-          background-color: $colorBgLight;
+          opacity: 0.5;
           pointer-events: none;
         }
 
@@ -75,35 +84,47 @@
   }
 }
 
-.selectHeader {
-  .select {
-    :global {
-      .select {
-        &__value-container {
-          padding: 0 0 0 0.2rem;
-          min-width: 3rem;
+.selectLang {
+  :global {
+    .select {
+      &__value-container {
+        padding: 0 0 0 0.2rem;
+        min-width: 3rem;
+      }
+
+      &__control {
+        border: none;
+      }
+    }
+  }
+}
+
+.select {
+  :global {
+    .select {
+      &__single-value {
+        @include fontSelect;
+      }
+
+      &__indicator-separator {
+        display: none;
+      }
+
+      &__dropdown-indicator {
+        svg {
+          width: 1.5rem;
+          height: 1.5rem;
+          fill: $colorFontDarker3;
         }
+      }
 
-        &__single-value {
-          @include fontSelect;
-        }
+      &__option {
+        @include fontSelect;
 
-        &__dropdown-indicator {
-          svg {
-            width: 1.5rem;
-            height: 1.5rem;
-            fill: $colorFontDarker3;
-          }
-        }
-
-        &__option {
-          @include fontSelect;
-
-          &:hover,
-          &--is-focused {
-            color: $colorLightest;
-            background-color: $colorHighlight;
-          }
+        &:hover,
+        &--is-focused {
+          color: $colorLightest;
+          background-color: $colorHighlight;
         }
       }
     }

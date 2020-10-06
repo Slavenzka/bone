@@ -24,6 +24,10 @@
   background-color: $colorLightest;
 }
 
+.input {
+  width: 10rem;
+}
+
 .value {
   @include fontValue;
 
@@ -43,4 +47,5 @@
   align-items: center;
   margin: 0;
   width: 100%;
+  height: 2.4rem;
 }

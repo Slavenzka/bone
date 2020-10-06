@@ -1,25 +1,44 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import css from './InfoBlock.module.scss'
 import classnames from 'classnames'
 import Heading, { HeadingTypes } from 'components/Heading/Heading'
-import CurrencyLogo, { CurrencyTypes } from 'components/CurrencyLogo/CurrencyLogo'
-import SelectStandard from 'components/Select/SelectStandard'
+import CurrencyLogo from 'components/CurrencyLogo/CurrencyLogo'
+import SelectStandard, { SelectStyleTypes } from 'components/Select/SelectStandard'
 import { Controller } from 'react-hook-form'
+import Input, { InputTypes } from 'components/Input/Input'
 
 const InfoBlock = ({
-  className,
-  control,
-  label = 'Some label',
-  namespace,
-  value = 'Some value',
-  defaultCurrency = CurrencyTypes.BITCOIN,
-  selectedCurrency,
-  from = '0',
-  to = '0',
-  options
+   className,
+   control,
+   register,
+   label = 'Some label',
+   namespace,
+   amount,
+   defaultCurrency,
+   selectedCurrency,
+   legend = 'Some legend data',
+   options,
+   balance,
+   isWalletConnected,
+   isInputDisabled,
+   setValue,
+   getValues,
+  isLoading
 }) => {
   const currency = selectedCurrency || defaultCurrency
   const filteredOptions = options.filter(item => item.value !== currency.value)
+
+  const icon = <CurrencyLogo type={currency.value} />
+
+  useEffect(() => {
+    const value = parseFloat(amount).toFixed(2)
+    const existingValue = +getValues()[`${namespace}-input`]
+    const isValueChanged = +existingValue !== +value
+
+    if (isValueChanged) {
+      setValue(`${namespace}-input`, value)
+    }
+  }, [amount, namespace, setValue, getValues])
 
   return (
     <div className={classnames(css.wrapper, className)}>
@@ -31,9 +50,14 @@ const InfoBlock = ({
         tag='h2'
       />
       <div className={css.content}>
-        <p className={css.value}>
-          { value }
-        </p>
+        <Input
+          className={css.input}
+          register={register}
+          name={`${namespace}-input`}
+          defaultValue={''}
+          isDisabled={isLoading || isInputDisabled}
+          inputType={InputTypes.CALCULATOR}
+        />
         <Controller
           as={SelectStandard}
           name={namespace}
@@ -41,15 +65,20 @@ const InfoBlock = ({
           defaultValue={defaultCurrency}
           className={css.select}
           options={filteredOptions}
+          icon={icon}
+          type={SelectStyleTypes.CURRENCY}
+          isCalculator
+          isDisabled={isLoading}
+          // menuIsOpen
         />
       </div>
       <p className={css.legend}>
-        <span className={css.from}>
-          { from }
-        </span>
-        <span className={css.to}>
-          { to }
-        </span>
+        {/*<span className={css.from}>*/}
+        {/*  { from }*/}
+        {/*</span>*/}
+        {/*<span className={css.to}>*/}
+        {/*  { to }*/}
+        {/*</span>*/}
       </p>
     </div>
   )

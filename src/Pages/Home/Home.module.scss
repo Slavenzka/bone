@@ -20,17 +20,17 @@
   }
 
   .themeDark {
-    --colorBgAside: rgb(34, 34, 34);
-    --colorFontNavigation: rgba(255, 255, 255, 0.5);
-    --colorBgHighlight: rgba(237, 235, 223, 0.07);
-    --colorFontMain: rgba(255, 255, 255, 0.8);
-    --tableRowBgOrdinary: rgba(237, 235, 223, 0.07);
-    --tableRowBgBest: rgba(237, 235, 223, 0.13);
-    --colorFontTableHeading: rgba(255, 255, 255, 0.3);
-    --colorFontTableOrdinary: rgba(255, 255, 255, 0.6);
-    --colorFontTableBest: rgba(255, 255, 255, 0.8);
-    --colorFontFooterNav: rgba(255, 255, 255, 0.5);
-    --colorSocialIcon: rgba(195, 176, 145, 0.4);
+    --colorBgAside: rgb(225, 216, 199);
+    --colorFontNavigation: rgba(46, 46, 46, 0.5);
+    --colorBgHighlight: rgba(237, 235, 223, 0.5);
+    --colorFontMain: rgba(24, 24, 24, 0.8);
+    --tableRowBgOrdinary: rgba(237, 235, 223, 0.5);
+    --tableRowBgBest: rgba(237, 235, 223, 0.9);
+    --colorFontTableHeading: rgba(24, 24, 24, 0.3);
+    --colorFontTableOrdinary: rgba(24, 24, 24, 0.8);
+    --colorFontTableBest: rgba(24, 24, 24, 0.8);
+    --colorFontFooterNav: rgba(24, 24, 24, 0.6);
+    --colorSocialIcon: rgb(195, 176, 145);
   }
 }
 
@@ -52,6 +52,12 @@
 
 .content {
   padding-top: 2.7rem;
+}
+
+.wallet {
+  @include fontWallet;
+
+  margin: 2rem 0 0 0;
 }
 
 .form {

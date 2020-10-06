@@ -1,0 +1,21 @@
+@import "styles/variables";
+
+.wrapper {
+  padding: 1.8rem;
+
+  :global {
+    .simplebar-track.simplebar-vertical {
+      right: -1.5rem;
+      width: 0.3rem;
+    }
+
+    .simplebar-scrollbar.simplebar-visible::before {
+      left: 0;
+      right: 0;
+      width: 100%;
+      background: $colorScrollbar;
+      opacity: 0.5;
+      border-radius: 0.2rem;
+    }
+  }
+}

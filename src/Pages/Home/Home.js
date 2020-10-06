@@ -15,12 +15,14 @@ import Footer from 'components/Footer/Footer'
 // import Modal from 'components/Modal/Modal'
 import Navigation from 'components/Navigation/Navigation'
 import Select, { SelectStyleTypes } from 'components/Select/SelectStandard'
+import Modal from 'components/Modal/Modal'
 
 const Home = () => {
   const summaryRef = useRef(null)
   const lang = useSelector(state => state.ui.lang)
   const deviceType = useSelector(state => state.elastic.deviceType)
   const theme = useSelector(state => state.ui.theme)
+  const userWallet = useSelector(state => state.data.userWallet)
   const dispatch = useDispatch()
   const availableLangOptions = LangOptions
     .filter(langOption => langOption.value !== lang.value)
@@ -36,7 +38,6 @@ const Home = () => {
   }
 
   const handleClickScroll = () => {
-    console.log(summaryRef.current)
     const target = summaryRef.current
     const scrollDistance = target.getBoundingClientRect().top + window.pageYOffset
 
@@ -45,8 +46,6 @@ const Home = () => {
       behavior: 'smooth'
     })
   }
-
-  console.log(theme)
 
   return (
     <Container className={css.wrapper}>
@@ -81,9 +80,17 @@ const Home = () => {
           </header>
           <div className={css.content}>
             <Heading label='Smart Exchange' />
-            <ExchangeIntroForm deviceType={deviceType} className={css.form} />
+            {userWallet &&
+              <p className={css.wallet}>
+                { `You have connected wallet: ${userWallet}` }
+              </p>
+            }
+            <ExchangeIntroForm
+              deviceType={deviceType}
+              className={css.form}
+            />
           </div>
-          {/*<Modal />*/}
+          <Modal />
         </ContainerInner>
       </section>
       <aside

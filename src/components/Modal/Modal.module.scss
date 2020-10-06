@@ -3,15 +3,15 @@
 
 .wrapper {
   position: absolute;
-  left: 0;
+  right: -1px;
   top: 0;
   display: block;
   padding: 11.7rem 5rem;
-  width: 100%;
+  width: 120%;
   height: 100%;
-  background-color: $colorBgMain;
+  background-color: $colorBgDarkest;
   transition-duration: $transitionDuration;
-  transform: translateX(-100%);
+  transform: translateX(-120%);
   transition-property: transform;
   pointer-events: none;
   z-index: 2;
