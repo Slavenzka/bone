@@ -5,7 +5,6 @@ import { components } from 'react-select'
 const CurrencyOption = props => {
   const { data = {} } = props
   const { descriptor, icon: Icon } = data
-  console.log(props)
 
   return (
     <components.Option {...props}>

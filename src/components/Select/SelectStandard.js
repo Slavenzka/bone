@@ -29,7 +29,8 @@ const SelectStandard = ({
   name,
   icon,
   isCalculator,
-  menuIsOpen
+  menuIsOpen,
+  isSearchable,
 }) => {
   const colourStyles = {
     control: (styles) => ({
@@ -77,7 +78,7 @@ const SelectStandard = ({
         ? <Select
           options={options}
           defaultValue={defaultValue || undefined}
-          isSearchable={false}
+          isSearchable={isSearchable}
           className={classnames(css.select, {
             [css.selectCurrency]: type === SelectStyleTypes.CURRENCY,
             [css.selectLang]: type === SelectStyleTypes.LANG,
@@ -98,7 +99,7 @@ const SelectStandard = ({
         : <Select
           options={options}
           defaultValue={defaultValue || undefined}
-          isSearchable={false}
+          isSearchable={isSearchable}
           className={classnames(css.select, {
             [css.selectCurrency]: type === SelectStyleTypes.CURRENCY,
             [css.selectLang]: type === SelectStyleTypes.LANG,

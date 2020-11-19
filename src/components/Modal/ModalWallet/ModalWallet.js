@@ -27,7 +27,7 @@ const ModalWallet = () => {
   }
 
   return (
-    <>
+    <div className={css.wrapper}>
       <Heading
         className={css.heading}
         label='Connect Wallet'
@@ -48,7 +48,7 @@ const ModalWallet = () => {
           )
         })}
       </ul>
-    </>
+    </div>
   )
 }
 

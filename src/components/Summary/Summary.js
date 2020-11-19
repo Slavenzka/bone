@@ -1,128 +1,94 @@
 import React, { useEffect, useState } from 'react'
 import css from './Summary.module.scss'
 import classnames from 'classnames'
-import Tag from 'components/Tag/Tag'
 import SimpleBar from 'simplebar-react'
 import { DeviceTypes } from 'utils/const'
-// import inchLogo from 'assets/images/Summary__logo--1inch.png'
-// import pathfinderLogo from 'assets/images/Summary__logo--pathfinder.png'
-// import airswapLogo from 'assets/images/Summary__logo--airswap.png'
-// import uniswapLogo from 'assets/images/Summary__logo--uniswap.png'
-// import oasisLogo from 'assets/images/Summary__logo--oasis.png'
-// import kyberLogo from 'assets/images/Summary__logo--kyber.png'
-// import kyber2Logo from 'assets/images/Summary__logo--kyber2.png'
-
-const data = [
-  {
-    exchanger: '1inch',
-    logo: '',
-    amount: '8.89942446 ETH',
-    rates: '29.93563837',
-    currency: 'BTC/ETH',
-  },
-  {
-    exchanger: 'Pathfinder',
-    logo: '',
-    amount: '8.79942446 ETH',
-    rates: '29.83563837',
-    currency: 'BTC/ETH',
-  },
-  {
-    exchanger: 'AirSwap',
-    logo: '',
-    amount: '8.59942446 ETH',
-    rates: '29.83563837',
-    currency: 'BTC/ETH',
-  },
-  {
-    exchanger: 'Uniswap',
-    logo: '',
-    amount: '8.59942446 ETH',
-    rates: '29.83563837',
-    currency: 'BTC/ETH',
-  },
-  {
-    exchanger: 'Oasis',
-    logo: '',
-    amount: '8.59942446 ETH',
-    rates: '29.83563837',
-    currency: 'BTC/ETH',
-  },
-  {
-    exchanger: '1inch03',
-    logo: '',
-    amount: '8.59942446 ETH',
-    rates: '29.83563837',
-    currency: 'BTC/ETH',
-  },
-  {
-    exchanger: 'Kyber',
-    logo: '',
-    amount: '8.59942446 ETH',
-    rates: '29.83563837',
-    currency: 'BTC/ETH',
-  },
-  {
-    exchanger: 'Kyber 2',
-    logo: '',
-    amount: '8.59942446 ETH',
-    rates: '29.83563837',
-    currency: 'BTC/ETH',
-  },
-]
+import axios from 'axios'
+import spinner from 'assets/images/Spinner.gif'
 
 const Summary = ({
   className,
   deviceType,
-  total = '$ 948 700.67'
 }) => {
-  const [fetchedData, updateFetchedData] = useState([])
+  const [isFetching, updateFetchingStatus] = useState(false)
+  const [fetchedData, updateFetchedData] = useState(null)
 
-  const processedData = fetchedData.sort((a, b) => a.rates < b.rates)
+  useEffect(() => {
 
-  const table = (
+    updateFetchingStatus(true)
+    axios.get(`https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false`)
+      .then(response => {
+        setTimeout(() => {
+          updateFetchingStatus(false)
+        }, 3000)
+        const fetchedData = response.data.filter(item => (
+          item.id === 'ethereum' ||
+          item.id === 'tether' ||
+          item.id === 'usd-coin' ||
+          item.id === 'dai'
+        ))
+
+        updateFetchedData(fetchedData)
+      })
+      .catch(error => {
+        updateFetchingStatus(false)
+      })
+  }, [])
+
+
+  const renderTable = () => (
     <table className={css.table}>
       <tbody>
       <tr>
         <th className={css.heading}>
-          Exchager
+          Token
         </th>
         <th className={css.heading}>
-          Amount
+          Last price
         </th>
         <th className={css.heading}>
-          Rates
+          Day-to-day change
+        </th>
+        <th className={css.heading}>
+          Max. price
+        </th>
+        <th className={css.heading}>
+          Min. price
         </th>
       </tr>
-      {processedData.map(({ exchanger, logo, amount, rates, currency }, index) => (
+      {fetchedData.map(({
+        id,
+        symbol,
+        current_price,
+        price_change_percentage_24h,
+        high_24h,
+        low_24h
+      }, index) => (
           <tr
-            className={classnames(css.rowData, {
-              [css.rowDataBest]: index === 0
-            })}
+            className={css.rowData}
             key={`Table row#${index}`}
           >
-            <td className={classnames(css.cell, {
-              [css.cellHighlightened]: index === 0,
-            })}>
-              {logo && deviceType === DeviceTypes.DESKTOP &&
-                <img className={css.logo} src={logo} alt={`Логотип ${exchanger}`} />
-              }
-              <span className={css.content}>
-                { exchanger.toUpperCase() }
-                {index === 0 &&
-                  <Tag className={css.tag} label='Best' />
-                }
+            <td className={css.cell}>
+              { `${id.toUpperCase()} (${symbol.toUpperCase()})` }
+            </td>
+            <td className={css.cell}>
+              { `$ ${current_price >= 1 ? current_price.toFixed(2) : current_price.toFixed(4)}` }
+            </td>
+            <td className={css.cell}>
+              <span
+                className={classnames(css.change, {
+                  [css.changeRise]: price_change_percentage_24h > 0,
+                  [css.changeFall]: price_change_percentage_24h < 0
+                })}
+              >
+                { `${Math.abs(price_change_percentage_24h).toFixed(2)} %` }
               </span>
             </td>
-            <td className={classnames(css.cell, {
-              [css.cellHighlightened]: index === 0
-            })}>
-              { amount }
+            <td className={css.cell}>
+              { `$ ${high_24h >= 1 ? high_24h.toFixed(2) : high_24h.toFixed(4)}` }
             </td>
-            <td className={classnames(css.cell, {
-              [css.cellHighlightened]: index === 0
-            })}>
-              { `${rates} ${currency}` }
+            <td className={css.cell}>
+              { `$ ${low_24h >= 1 ? low_24h.toFixed(2) : low_24h.toFixed(4)}` }
             </td>
           </tr>
         ))}
@@ -130,35 +96,42 @@ const Summary = ({
     </table>
   )
 
-  useEffect(() => {
-    updateFetchedData(data)
-  }, [])
+  let content = (
+    <img
+      className={css.skull}
+      src={spinner}
+      alt='Bone spinner'
+    />
+  )
+
+  if (!isFetching && !fetchedData) {
+    content = null
+  }
+
+  if (!isFetching && fetchedData) {
+    content = deviceType === DeviceTypes.DESKTOP
+      ? renderTable()
+      : (
+        <div className={css.tableAdaptiveWrapper}>
+          <SimpleBar
+            style={{
+              maxWidth: '32rem',
+            }}
+            autoHide={false}
+          >
+            { renderTable() }
+          </SimpleBar>
+        </div>
+      )
+  }
+
 
   return (
     <div className={classnames(css.wrapper, className)}>
-      {total &&
-        <p className={css.total}>
-          { 'Total exchange amount completed' }
-          <span className={css.quantity}>
-            { total }
-          </span>
-        </p>
-      }
-      {deviceType === DeviceTypes.DESKTOP
-        ? table
-        : (
-          <div className={css.tableAdaptiveWrapper}>
-            <SimpleBar
-              style={{
-                maxWidth: '32rem',
-              }}
-              autoHide={false}
-            >
-              { table }
-            </SimpleBar>
-          </div>
-        )
-      }
+      <p className={css.total}>
+        Market results for popular tokens for the last 24 hours
+      </p>
+      { content }
     </div>
   )
 }

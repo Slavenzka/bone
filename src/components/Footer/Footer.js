@@ -47,7 +47,7 @@ const Footer = ({ className }) => {
         { navlist }
       </div>
       <p className={css.copyright}>
-        © 2020 Carrota. All rights reserved
+        © 2020 Bone. All rights reserved
       </p>
     </footer>
   )

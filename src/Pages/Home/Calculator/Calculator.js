@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getExchangeEstimate } from 'store/actions/data'
 import IconExchange from 'assets/icons/IconExchange'
 import InfoBlock from 'components/InfoBlock/InfoBlock'
+import Preloader, { PreloaderTypes } from 'components/Preloader/Preloader'
 
 const Calculator = ({
   control,
@@ -25,13 +26,20 @@ const Calculator = ({
   const userBalance = useSelector(state => state.data.userBalance)
   const { fromTokenAmount, toTokenAmount } = exchangeEstimate
 
-  useEffect(() => {
-    const { source, result } = getValues()
+  const renderIcon = isLoading => isLoading
+    ? (
+      <Preloader
+        className={css.preloader}
+        type={PreloaderTypes.MINIFIED}
+      />
+    )
+    : <IconExchange className={css.icon} />
 
-    if (source && result) {
-      dispatch(getExchangeEstimate(valueSource, source.label, result.label))
+  useEffect(() => {
+    if (selectedSource && selectedResult) {
+      dispatch(getExchangeEstimate(valueSource, selectedSource.label, selectedResult.label))
     }
-  }, [dispatch, getValues, selectedSource, valueSource, selectedResult])
+  }, [dispatch, selectedSource, valueSource, selectedResult])
 
   return (
     <>
@@ -39,9 +47,10 @@ const Calculator = ({
         className={css.buttonToggle}
         onClick={handleClickToggle}
         type='button'
+        disabled={isLoading}
       >
         Toggle currencies
-        <IconExchange className={css.icon} />
+        { renderIcon(isLoading) }
       </button>
       <InfoBlock
         className={css.item}
@@ -58,6 +67,7 @@ const Calculator = ({
         isWalletConnected={userWallet}
         setValue={setValue}
         getValues={getValues}
+        isSource
         isLoading={isLoading}
       />
       <InfoBlock
@@ -75,6 +85,7 @@ const Calculator = ({
         setValue={setValue}
         getValues={getValues}
         isLoading={isLoading}
+        isResult
         isInputDisabled
       />
     </>

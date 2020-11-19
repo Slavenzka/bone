@@ -26,12 +26,25 @@
 
 .input {
   width: 10rem;
+  height: 2rem;
 }
 
 .value {
   @include fontValue;
 
   margin: 0;
+}
+
+.label {
+  display: flex;
+  justify-content: space-between;
+  margin: 0;
+
+  .from {
+    @include fontHint;
+
+    opacity: 0.5;
+  }
 }
 
 .select {
@@ -48,4 +61,12 @@
   margin: 0;
   width: 100%;
   height: 2.4rem;
+  transition-duration: $transitionDuration;
+  opacity: 0;
+  transform: translateY(1rem);
+}
+
+.legendVisible {
+  opacity: 1;
+  transform: translateY(0);
 }

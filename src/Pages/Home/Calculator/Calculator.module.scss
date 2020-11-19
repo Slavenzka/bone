@@ -3,7 +3,7 @@
 
 .item {
   &:not(:first-child) {
-    margin-top: 1.5rem;
+    margin-top: 3rem;
   }
 }
 
@@ -11,7 +11,7 @@
   @include resetButton;
 
   position: absolute;
-  top: 10.5rem;
+  top: calc(50% - 4rem / 2 + 2rem);
   left: calc(50% - 3.5rem / 2);
   width: 4rem;
   height: 4rem;
@@ -21,13 +21,13 @@
 
   &:hover {
     .icon {
-      stroke: $colorFontDarker1;
+      fill: $colorFontDarker1;
     }
   }
 }
 
 .icon {
   width: 2rem;
-  stroke: $colorHighlight;
+  fill: $colorHighlight;
   transition-duration: $transitionDuration;
 }

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React, { useEffect, useRef } from 'react'
 import css from './Home.module.scss'
 import classnames from 'classnames'
 import Container from 'components/Grid/Container'
@@ -6,7 +6,7 @@ import ContainerInner from 'components/Grid/ContainerInner'
 import Logo from 'components/Logo/Logo'
 import { DeviceTypes, LangOptions, Themes } from 'utils/const'
 import { useDispatch, useSelector } from 'react-redux'
-import { setLang, toggleModal } from 'store/actions'
+import { getSystemGas, setLang, toggleModal } from 'store/actions'
 import Heading from 'components/Heading/Heading'
 import ExchangeIntroForm from 'components/ExchangeIntroForm/ExchangeIntroForm'
 import Button, { ButtonTypes } from 'components/Button/Button'
@@ -16,6 +16,7 @@ import Footer from 'components/Footer/Footer'
 import Navigation from 'components/Navigation/Navigation'
 import Select, { SelectStyleTypes } from 'components/Select/SelectStandard'
 import Modal from 'components/Modal/Modal'
+import axiosBone from 'axiosBone'
 
 const Home = () => {
   const summaryRef = useRef(null)
@@ -23,6 +24,7 @@ const Home = () => {
   const deviceType = useSelector(state => state.elastic.deviceType)
   const theme = useSelector(state => state.ui.theme)
   const userWallet = useSelector(state => state.data.userWallet)
+  const gas = useSelector(state => state.data.systemGas)
   const dispatch = useDispatch()
   const availableLangOptions = LangOptions
     .filter(langOption => langOption.value !== lang.value)
@@ -47,6 +49,17 @@ const Home = () => {
     })
   }
 
+  useEffect(() => {
+    dispatch(getSystemGas())
+  }, [dispatch])
+
+  useEffect(() => {
+    axiosBone.get(`https://api.coingecko.com/api/v3/coins/ethereum/history?date=09-11-2020`)
+      .then(response => {
+        console.log(response.data)
+      })
+  })
+
   return (
     <Container className={css.wrapper}>
       <section>
@@ -61,6 +74,11 @@ const Home = () => {
               onChange={handleLangChange}
               type={SelectStyleTypes.LANG}
             />
+            <p className={classnames(css.gas, {
+              [css.gasVisible]: !!gas
+            })}>
+              {`Average gas price: ${gas} gwei`}
+            </p>
             {deviceType === DeviceTypes.ADAPTIVE &&
               <>
                 <button
@@ -79,10 +97,13 @@ const Home = () => {
             }
           </header>
           <div className={css.content}>
-            <Heading label='Smart Exchange' />
+            <Heading label='Pick up your bones' />
             {userWallet &&
               <p className={css.wallet}>
-                { `You have connected wallet: ${userWallet}` }
+                <span className={css.walletLabel}>
+                  You have connected wallet:
+                </span>
+                { userWallet }
               </p>
             }
             <ExchangeIntroForm

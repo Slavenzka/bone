@@ -8,7 +8,7 @@ import * as serviceWorker from './serviceWorker';
 import elasticAdaptive from 'store/reducers/elasticAdaptive'
 import App from 'App'
 import thunk from 'redux-thunk'
-import { HashRouter } from 'react-router-dom'
+import { BrowserRouter } from 'react-router-dom'
 import { uiReducer } from 'store/reducers/ui'
 import { dataReducer } from 'store/reducers/data'
 
@@ -22,9 +22,9 @@ const store = createStore(rootReducer,applyMiddleware(thunk))
 
 const Content = (
   <Provider store={store}>
-    <HashRouter basename='#'>
+    <BrowserRouter>
       <App />
-    </HashRouter>
+    </BrowserRouter>
   </Provider>
 )
 

@@ -59,6 +59,10 @@
   }
 }
 
+.label {
+  @include fontMenu(400, $colorLightest);
+}
+
 @media (max-width: $adaptiveMax) {
   .wrapper {
     padding-bottom: 5rem;

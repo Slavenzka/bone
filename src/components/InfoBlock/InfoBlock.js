@@ -6,6 +6,8 @@ import CurrencyLogo from 'components/CurrencyLogo/CurrencyLogo'
 import SelectStandard, { SelectStyleTypes } from 'components/Select/SelectStandard'
 import { Controller } from 'react-hook-form'
 import Input, { InputTypes } from 'components/Input/Input'
+import { useDispatch, useSelector } from 'react-redux'
+import { getWalletBalance } from 'store/actions/data'
 
 const InfoBlock = ({
    className,
@@ -23,15 +25,32 @@ const InfoBlock = ({
    isInputDisabled,
    setValue,
    getValues,
-  isLoading
+   isLoading,
+   isResult,
+   isSource
 }) => {
+  const balanceCurrentToken = useSelector(state => state.data.userBalance)
+  const wallet = useSelector(state => state.data.userWallet)
   const currency = selectedCurrency || defaultCurrency
   const filteredOptions = options.filter(item => item.value !== currency.value)
+  const dispatch = useDispatch()
+  const headingLabel = isSource
+    ? (
+      <p className={css.label}>
+        { label }
+        {isWalletConnected &&
+          <span className={css.from}>
+            {`${balanceCurrentToken}  ${currency.label}`}
+          </span>
+        }
+      </p>
+    )
+    : label
 
   const icon = <CurrencyLogo type={currency.value} />
 
   useEffect(() => {
-    const value = parseFloat(amount).toFixed(2)
+    const value = parseFloat(amount).toFixed(4)
     const existingValue = +getValues()[`${namespace}-input`]
     const isValueChanged = +existingValue !== +value
 
@@ -40,12 +59,21 @@ const InfoBlock = ({
     }
   }, [amount, namespace, setValue, getValues])
 
+  useEffect(() => {
+    console.log(isSource)
+    console.log(wallet)
+    if (isSource && wallet) {
+      console.log(currency)
+      dispatch(getWalletBalance(wallet, currency))
+    }
+  }, [currency, wallet])
+
   return (
     <div className={classnames(css.wrapper, className)}>
       <Heading
         className={css.key}
         color={HeadingTypes.colors.DARK}
-        label={label}
+        label={headingLabel}
         size={HeadingTypes.size.SMALL}
         tag='h2'
       />
@@ -69,17 +97,20 @@ const InfoBlock = ({
           type={SelectStyleTypes.CURRENCY}
           isCalculator
           isDisabled={isLoading}
+          isSearchable
           // menuIsOpen
         />
       </div>
-      <p className={css.legend}>
-        {/*<span className={css.from}>*/}
-        {/*  { from }*/}
-        {/*</span>*/}
-        {/*<span className={css.to}>*/}
-        {/*  { to }*/}
-        {/*</span>*/}
-      </p>
+      {/*{isResult &&*/}
+      {/*  <p className={css.legend}>*/}
+      {/*    <span className={css.from}>*/}
+      {/*      {`min: 50 ETH, max: 50 ETH`}*/}
+      {/*    </span>*/}
+      {/*    <span className={css.to}>*/}
+      {/*      { to }*/}
+      {/*    </span>*/}
+      {/*  </p>*/}
+      {/*}*/}
     </div>
   )
 }

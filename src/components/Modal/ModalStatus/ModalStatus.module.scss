@@ -1,0 +1,25 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.wrapper {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  .message {
+    @include fontLabel;
+
+    margin: 0;
+    text-align: center;
+  }
+
+  .link {
+    margin-top: 4rem;
+  }
+
+  .button {
+    margin-top: 4rem;
+  }
+}

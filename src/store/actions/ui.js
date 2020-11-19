@@ -1,4 +1,4 @@
-import { SET_LANG, SET_THEME, TOGGLE_MODAL } from 'store/actions/actionTypes'
+import { SET_BUTTON_TYPE, SET_LANG, SET_THEME, TOGGLE_MODAL } from 'store/actions/actionTypes'
 
 export const setLang = lang => {
   return {
@@ -23,3 +23,8 @@ export const setTheme = theme => {
     payload: theme
   }
 }
+
+export const setButtonType = type => ({
+  type: SET_BUTTON_TYPE,
+  payload: type
+})

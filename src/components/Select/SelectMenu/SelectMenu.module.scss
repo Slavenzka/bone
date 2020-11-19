@@ -19,3 +19,15 @@
     }
   }
 }
+
+@media (max-width: $adaptiveMax) {
+  .wrapper {
+    padding-right: 0;
+
+    :global {
+      .simplebar-scrollbar.simplebar-visible::before {
+        display: none;
+      }
+    }
+  }
+}

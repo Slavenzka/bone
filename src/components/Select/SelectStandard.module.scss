@@ -21,6 +21,13 @@
         cursor: pointer;
       }
 
+      &__control--is-disabled {
+        .select__dropdown-indicator {
+          display: block;
+          opacity: 0.2;
+        }
+      }
+
       &__value-container {
         min-width: 6rem;
         min-height: 1.6rem;
@@ -125,6 +132,18 @@
         &--is-focused {
           color: $colorLightest;
           background-color: $colorHighlight;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: $adaptiveMax) {
+  .selectCurrency {
+    :global {
+      .select {
+        &__menu {
+          width: calc(100vw - 2 * var(--padding-h-inner))
         }
       }
     }

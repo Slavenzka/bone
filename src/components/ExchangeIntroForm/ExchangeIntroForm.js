@@ -2,34 +2,51 @@ import React, { useEffect, useState } from 'react'
 import css from './ExchangeIntroForm.module.scss'
 import classnames from 'classnames'
 import {
-  DeviceTypes,
-  gasFeeOptions,
-  gasFeeOptionsAdaptive, LoadingStates,
-  priceSlippageOptions, Themes
+  priceSlippageOptions,
+  LoadingStates,
+  Themes
 } from 'utils/const'
-import { useForm } from 'react-hook-form'
+import { useForm } from "react-hook-form"
 import { Collapse } from 'react-collapse/lib/Collapse'
 import SettingsBlock from 'components/SettingsBlock/SettingsBlock'
 import Button from 'components/Button/Button'
 import { useDispatch, useSelector } from 'react-redux'
-import { setTheme, toggleModal } from 'store/actions'
-import ModalWallet from 'components/Modal/ModalWallet/ModalWallet'
+import { resetData, setTheme, toggleModal } from 'store/actions'
 import { getTokens } from 'store/actions/data'
 import IconBitcoin from 'assets/icons/IconBitcoin'
 import Calculator from 'Pages/Home/Calculator/Calculator'
 import useDebounce from 'hooks/useDebounce'
 import Preloader from 'components/Preloader/Preloader'
-import axiosBone from 'axiosBone'
-import Web3 from 'web3'
-import { miniABI } from 'components/ExchangeIntroForm/_assets/miniABI'
-// import detectEthereumProvider from '@metamask/detect-provider'
+import ModalSuccess from 'components/Modal/ModalSuccess/ModalSuccess'
+import ModalWallet from 'components/Modal/ModalWallet/ModalWallet'
+import { ActionButtonTypes } from 'utils/ActionButtonTypes'
 
-const ExchangeIntroForm = ({ className, deviceType }) => {
+const DEBOUNCE_DELAY = 500
+const DEFAULT_FROM_TOKEN = 'USDT'
+const DEFAULT_FROM_AMOUNT = 1
+const DEFAULT_TO_TOKEN = 'DAI'
+
+const ExchangeIntroForm = ({ className }) => {
   const [isCollapseOpened, toggleCollapseStatus] = useState(false)
   const dispatch = useDispatch()
+  const gasFeeOptions = useSelector(state => state.data.gasFeeOptions)
+  const mainButton = useSelector(state => state.ui.submitButtonType)
   const loadingState = useSelector(state => state.data.loadingState)
   const userWallet = useSelector(state => state.data.userWallet)
   const tokens = useSelector(state => state.data.availableTokens)
+    // .filter(item => item.symbol !== 'ETH')
+    .sort((a, b) => {
+      if (
+        a.symbol !== 'DAI' &&
+        a.symbol !== 'USDT' &&
+        a.symbol !== 'USDC' &&
+        a.symbol !== 'BUSD' &&
+        a.symbol !== 'ETH'
+      ) {
+        return 1
+      }
+      return -1
+    })
     .map(({ symbol, name, address, decimals }) => ({
       label: symbol,
       value: address,
@@ -37,77 +54,27 @@ const ExchangeIntroForm = ({ className, deviceType }) => {
       icon: IconBitcoin,
       decimals
     }))
+  // const allowance = useSelector(state => state.data.allowance)
+  const txData = useSelector(state => state.data.txData) || {}
 
   const fromValue = useSelector(state => state.data.exchangeEstimate.fromTokenAmount)
-  const { register, control, watch, setValue, handleSubmit, getValues } = useForm({
+  const { register, control, watch, setValue, handleSubmit, getValues, reset } = useForm({
     defaultValues: {
       [`source-input`]: fromValue
     }
   })
-  const defaultSource = tokens.find(item => item.label === 'USDT')
+  const defaultSource = tokens.find(item => item.label === DEFAULT_FROM_TOKEN)
   const selectedSource = watch('source', defaultSource)
-  const valueSource = watch('source-input') || 1
-  const debouncedSourceValue = useDebounce(valueSource, 1000)
-  const defaultResult = tokens[1]
+  const valueSource = watch('source-input') || DEFAULT_FROM_AMOUNT
+  const debouncedSourceValue = useDebounce(valueSource, DEBOUNCE_DELAY)
+  const defaultResult = tokens.find(item => item.label === DEFAULT_TO_TOKEN)
   const selectedResult = watch('result', defaultResult) || {}
   // const radioFee = watch('radio input gas-fee')
   // const inputFee = watch('manual input gas-fee')
 
-  const handleExchangeClick = (data, selectedSource) => {
-    const dataRequest = {
-      addressFrom: userWallet,
-      amount: Number((+fromValue).toFixed(2)),
-      from: data.source.label,
-      to: data.result.label
-    }
-
-    axiosBone.post('/exchange/swap', dataRequest)
-      .then(response => {
-        const { to, gas, gasPrice, data } = response.data
-
-        const dataExchange = {
-          from: userWallet,
-          to,
-          gasLimit: `0x${(+gas).toString(16)}`,
-          gasPrice: `0x${(+gasPrice).toString(16)}`,
-          // value: `0x${(+value).toString(16)}`,
-          data
-        }
-
-        const web3 = new Web3(window.ethereum)
-        const decimals = web3.utils.toBN(selectedSource.decimals)
-        const amount = web3.utils.toBN(dataRequest.amount)
-        const contract = new web3.eth.Contract(miniABI, selectedSource.value)
-        const valueTest = amount.mul(web3.utils.toBN(10).pow(decimals))
-        // contract.methods.balanceOf(userWallet)
-        //   .call()
-        //   .then(response => {
-        //     console.log(response)
-        //   })
-
-
-        contract.methods.transfer(to, valueTest).send({ ...dataExchange }).on('transactionHash', hash => {
-          console.log(hash)
-          localStorage.setItem('lastTransactionHash', hash)
-        })
-
-        // window.ethereum
-        //   .request({
-        //     method: `eth_sendTransaction`,
-        //     params: dataExchange
-        //   })
-        //   .then(response => {
-        //     console.log(response)
-        //   })
-        //   .catch(() => {
-        //     // dispatch(toggleModal(true, <ModalWarning label='Произошла ошибка при выполнении транзакции' />))
-        //   })
-      })
-  }
-
   const handleButtonClick = () => {
     dispatch(toggleModal(true, <ModalWallet />))
-  }
+    }
 
   const handleClickToggle = () => {
     const container = Object.assign({}, selectedSource)
@@ -119,9 +86,28 @@ const ExchangeIntroForm = ({ className, deviceType }) => {
     dispatch(getTokens())
   }, [dispatch])
 
+  useEffect(() => {
+    const resetForm = () => {
+      reset({
+        [`source-input`]: DEFAULT_FROM_AMOUNT,
+        [`result-input`]: '',
+        [`source`]: tokens.find(item => item.label === DEFAULT_FROM_TOKEN),
+        [`result`]: tokens.find(item => item.label === DEFAULT_TO_TOKEN)
+      })
+    }
+
+    if (txData.transactionHash) {
+      console.log(reset)
+      dispatch(toggleModal(true, <ModalSuccess data={txData} />))
+      dispatch(resetData())
+      resetForm()
+
+    }
+  }, [txData.transactionHash, dispatch, txData, reset, tokens])
+
   return (
     <div className={classnames(css.wrapper, className)}>
-      <form onSubmit={handleSubmit(data => handleExchangeClick(data, selectedSource))}>
+      <form onSubmit={handleSubmit(data => dispatch(mainButton.clickHandler(data)))}>
         <div className={css.currencies}>
           {loadingState === LoadingStates.TOKENS_LOADING &&
             <Preloader className={css.preloader} />
@@ -135,12 +121,12 @@ const ExchangeIntroForm = ({ className, deviceType }) => {
               userWallet={userWallet}
               defaultSource={defaultSource}
               selectedSource={selectedSource}
-              valueSource={debouncedSourceValue}
+              valueSource={valueSource === DEFAULT_FROM_AMOUNT ? DEFAULT_FROM_AMOUNT : debouncedSourceValue}
               defaultResult={defaultResult}
               selectedResult={selectedResult}
               getValues={getValues}
               setValue={setValue}
-              isLoading={loadingState === LoadingStates.ESTIMATE_LOADING}
+              isLoading={loadingState === LoadingStates.ESTIMATE_LOADING || loadingState === LoadingStates.APPROVE_IN_PROCESS}
             />
           }
         </div>
@@ -165,10 +151,12 @@ const ExchangeIntroForm = ({ className, deviceType }) => {
             className={css.settings}
             label='GAS Fee'
             hint='Some hint for the gas fee block'
-            options={deviceType === DeviceTypes.DESKTOP ? gasFeeOptions : gasFeeOptionsAdaptive}
+            options={gasFeeOptions}
             register={register}
             namespace='gas-fee'
             setValue={setValue}
+            watch={watch}
+            isInitial={mainButton === ActionButtonTypes.CONNECT}
           />
           <SettingsBlock
             className={css.settings}
@@ -178,13 +166,16 @@ const ExchangeIntroForm = ({ className, deviceType }) => {
             register={register}
             namespace='price-slippage'
             setValue={setValue}
+            watch={watch}
+            isInitial={mainButton === ActionButtonTypes.CONNECT}
+            isSlippage
           />
         </Collapse>
         <Button
           className={css.button}
-          label={userWallet ? 'Exchange now' : 'Connect Your Wallet'}
-          type={userWallet ? 'submit' : 'button'}
-          onClick={userWallet ? undefined : handleButtonClick}
+          label={mainButton.label}
+          type={mainButton.type}
+          onClick={mainButton.type === 'button' ? handleButtonClick : undefined}
         />
       </form>
     </div>
