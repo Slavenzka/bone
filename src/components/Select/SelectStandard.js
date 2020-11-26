@@ -94,6 +94,7 @@ const SelectStandard = ({
           isDisabled={isDisabled}
           name={name || ''}
           backspaceRemovesValue={false}
+          captureMenuScroll={true}
           menuIsOpen={menuIsOpen}
         />
         : <Select
@@ -112,6 +113,7 @@ const SelectStandard = ({
           onBlur={onBlur}
           value={value}
           isDisabled={isDisabled}
+          captureMenuScroll={true}
           name={name || ''}
         />
       }

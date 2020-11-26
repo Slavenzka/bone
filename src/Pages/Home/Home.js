@@ -53,13 +53,6 @@ const Home = () => {
     dispatch(getSystemGas())
   }, [dispatch])
 
-  useEffect(() => {
-    axiosBone.get(`https://api.coingecko.com/api/v3/coins/ethereum/history?date=09-11-2020`)
-      .then(response => {
-        console.log(response.data)
-      })
-  })
-
   return (
     <Container className={css.wrapper}>
       <section>

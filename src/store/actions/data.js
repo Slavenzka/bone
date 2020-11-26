@@ -23,21 +23,23 @@ import { checkAllowance, tokenApproveSequence } from 'utils/exchangerInteraction
 import axios from 'axios'
 import { miniABI } from 'components/ExchangeIntroForm/_assets/miniABI'
 import { getGasFeeOptions } from 'utils'
+import WalletConnectProvider from "@walletconnect/web3-provider"
 
 export const setLoadingState = newState => ({
   type: SET_LOADING_STATE,
   payload: newState
 })
 
-export const createWeb3Instance = () => {
+export const createWeb3Instance = provider => {
   return {
     type: CREATE_WEB3_INSTANCE,
-    payload: new Web3(window.ethereum)
+    payload: new Web3(provider)
   }
 }
 
 export const getWalletBalance = (wallet, currency) => {
   return (dispatch, getState) => {
+    console.log(wallet)
     console.log(currency)
     if (currency.label !== 'ETH') {
       const web3 = getState().data.web3
@@ -45,11 +47,13 @@ export const getWalletBalance = (wallet, currency) => {
       contract.methods.balanceOf(wallet).call()
         .then(response => {
           const balance = new BigNumber(response).shiftedBy(-currency.decimals).toString(10)
+          console.log(balance)
           dispatch({
             type: GET_WALLET_BALANCE,
             payload: (+balance).toFixed(balance > 0 ? 2 : 4)
           })
         })
+        .catch(error => console.log(error))
     } else {
       window.ethereum
         .request({
@@ -77,6 +81,36 @@ export const getWalletBalance = (wallet, currency) => {
 export const  connectWallet = walletType => {
   return dispatch => {
     switch (walletType) {
+      case 'trustWallet': {
+        const provider = new WalletConnectProvider({
+          infuraId: 'de5c2f90928c407c9c1801306277faee',
+          rpc: {
+            1: "https://mainnet.infura.io/v3/de5c2f90928c407c9c1801306277faee"
+          }
+        })
+
+        provider.enable()
+          .then(response => {
+            console.log(response)
+            const userWallet = response[0]
+
+            const web3 = new Web3(provider)
+            web3.eth.getAccounts()
+              .then(response => {
+                console.log(response)
+              })
+
+            dispatch({
+              type: CONNECT_WALLET,
+              payload: userWallet
+            })
+
+            dispatch(createWeb3Instance(provider))
+            dispatch(toggleModal(false, null))
+            dispatch(setButtonType(ActionButtonTypes.APPROVE))
+          })
+        break
+      }
       default:
         const isExtensionAvailable = !!window.ethereum
 
@@ -99,7 +133,7 @@ export const  connectWallet = walletType => {
                 payload: userWallet
               })
 
-              dispatch(createWeb3Instance())
+              dispatch(createWeb3Instance(window.ethereum))
               dispatch(toggleModal(false, null))
               dispatch(setButtonType(ActionButtonTypes.APPROVE))
             })
