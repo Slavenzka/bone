@@ -15,14 +15,14 @@ const Footer = ({ className }) => {
       label: 'Analytics',
       url: HOME_PAGE
     },
-    {
-      label: 'Contacts',
-      url: HOME_PAGE
-    },
-    {
-      label: 'Privacy Policy',
-      url: HOME_PAGE
-    },
+    // {
+    //   label: 'Contacts',
+    //   url: HOME_PAGE
+    // },
+    // {
+    //   label: 'Privacy Policy',
+    //   url: HOME_PAGE
+    // },
   ]
 
   const navlist = (

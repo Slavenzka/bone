@@ -37,6 +37,8 @@
   }
 
   .item {
+    color: $colorLightest;
+
     &:first-child {
       margin-left: 0;
     }
@@ -45,10 +47,5 @@
       margin-top: 4rem;
       margin-left: 0;
     }
-  }
-
-  .button,
-  .link {
-    color: $colorLightest;
   }
 }

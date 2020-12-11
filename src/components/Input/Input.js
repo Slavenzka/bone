@@ -16,7 +16,8 @@ const Input = ({
   placeholder = 'Enter',
   onChange,
   isDisabled,
-  inputType = InputTypes.CUSTOMIZATION
+  inputType = InputTypes.CUSTOMIZATION,
+  createRef,
 }) => {
   return (
     <input
@@ -26,7 +27,10 @@ const Input = ({
       })}
       name={name}
       type={type}
-      ref={register}
+      ref={node => {
+        register(node)
+        createRef && createRef(node)
+      }}
       defaultValue={defaultValue}
       placeholder={placeholder}
       onChange={onChange}

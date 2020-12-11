@@ -14,17 +14,6 @@ export const LangOptions = [
   },
 ]
 
-export const CurrencyOptions = [
-  {
-    label: 'BTC',
-    value: 'BTC',
-  },
-  {
-    label: 'ETH',
-    value: 'ETH',
-  },
-]
-
 export const priceSlippageOptions = [
   {
     value: '0.1',
@@ -59,3 +48,12 @@ export const LoadingStates = {
 }
 
 export const exchangerAddress = '0xe4c9194962532feb467dce8b3d42419641c6ed2e'
+
+export const OperationTypes = {
+  RECEIVE: 'RECEIVE',
+  SEND: 'SEND'
+}
+
+export const GAS_LIMIT_APPROVAL = 100000
+export const GAS_LIMIT_SWAP_ERC20 = 500000
+export const GAS_LIMIT_SWAP_ETH = 350000

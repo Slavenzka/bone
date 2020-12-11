@@ -27,10 +27,10 @@ const SelectStandard = ({
   type = SelectStyleTypes.COMMON,
   id,
   name,
-  icon,
   isCalculator,
   menuIsOpen,
   isSearchable,
+  components = {},
 }) => {
   const colourStyles = {
     control: (styles) => ({
@@ -69,11 +69,10 @@ const SelectStandard = ({
       id={id}
     >
       {label &&
-      <p className={css.label}>
-        {label}
-      </p>
+        <p className={css.label}>
+          {label}
+        </p>
       }
-      { icon }
       {isCalculator
         ? <Select
           options={options}
@@ -85,9 +84,8 @@ const SelectStandard = ({
             [css.selectError]: isError
           })}
           classNamePrefix="select"
-          components={{ MenuList: SelectMenu, Option: CurrencyOption }}
+          components={{ MenuList: SelectMenu, Option: CurrencyOption, ...components }}
           styles={colourStyles}
-          placeholder='Выбрать'
           onChange={onChange}
           onBlur={onBlur}
           value={value}
@@ -96,6 +94,9 @@ const SelectStandard = ({
           backspaceRemovesValue={false}
           captureMenuScroll={true}
           menuIsOpen={menuIsOpen}
+          controlShouldRenderValue={false}
+          placeholder='Search'
+          autoFocus
         />
         : <Select
           options={options}

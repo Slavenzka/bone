@@ -1,0 +1,48 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.wrapper {
+  padding-top: 3rem;
+}
+
+.heading {
+  @include fontHint;
+
+  margin: 0;
+  color: $colorFontDarker1;
+}
+
+.list {
+  @include resetList;
+
+  margin-top: 1.5rem;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: 70% 30%;
+  grid-gap: 0.2rem;
+}
+
+.part {
+  text-align: right;
+}
+
+.itemOdd {
+  .name,
+  .part {
+    @include fontHint;
+
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    background-color: $colorBgDarker;
+  }
+}
+
+.name {
+  padding-left: 1.5rem;
+}
+
+.part {
+  padding-right: 1.5rem;
+}

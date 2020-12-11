@@ -11,8 +11,8 @@
     @include resetList;
 
     margin-top: 4.6rem;
-    border-top: 0.1rem solid $colorBorderMain;
-    border-bottom: 0.1rem solid $colorBorderMain;
+    border-top: 0.1rem solid rgba(255, 255, 255, 0.08);
+    border-bottom: 0.1rem solid rgba(255, 255, 255, 0.08);
   }
 
   .item {
@@ -22,11 +22,7 @@
     height: 17rem;
 
     &:not(:last-child) {
-      border-bottom: 0.1rem solid $colorBorderMain;
-    }
-
-    span {
-      color: white;
+      border-bottom: 0.1rem solid rgba(255, 255, 255, 0.08);
     }
 
     .icon {
@@ -35,13 +31,38 @@
       opacity: 0.5;
       transition-duration: $transitionDuration;
     }
+
+    .iconWallet {
+      width: 10rem;
+    }
   }
 
   .button {
     @include resetButton;
 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    span {
+      font-family: "Roboto", Arial, sans-serif;
+      font-size: 2rem;
+      font-weight: 400;
+      line-height: 1;
+      color: white;
+      text-transform: uppercase;
+      letter-spacing: 0.5rem;
+      opacity: 0.5;
+      transition-duration: $transitionDuration;
+    }
+
+
     &:hover {
       .icon {
+        opacity: 1;
+      }
+
+      span {
         opacity: 1;
       }
     }

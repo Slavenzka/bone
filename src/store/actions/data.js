@@ -6,7 +6,7 @@ import {
   GET_EXCHANGE_ESTIMATE, GET_SYSTEM_GAS,
   GET_WALLET_BALANCE,
   RESET_DATA,
-  SAVE_SWAP_DATA,
+  SAVE_SWAP_DATA, SAVE_TOKENS_RATING,
   SAVE_TX_DATA, SET_GAS_FEE, SET_GAS_FEE_OPTIONS,
   SET_LOADING_STATE, SET_PRICE_SLIPPAGE,
 } from 'store/actions/actionTypes'
@@ -14,7 +14,7 @@ import { setButtonType, toggleModal } from 'store/actions/ui'
 import React from 'react'
 import ModalWarning from 'components/Modal/ModalWarning/ModalWarning'
 import axiosBone from 'axiosBone'
-import { LoadingStates } from 'utils/const'
+import { GAS_LIMIT_SWAP_ERC20, GAS_LIMIT_SWAP_ETH, LoadingStates } from 'utils/const'
 import { ActionButtonTypes } from 'utils/ActionButtonTypes'
 import Web3 from 'web3'
 import { erc20ABI } from 'abis/erc20ABI'
@@ -78,10 +78,84 @@ export const getWalletBalance = (wallet, currency) => {
   }
 }
 
+export const getSortedTokensList = () => {
+  return (dispatch, getState) => {
+    const web3 = getState().data.web3
+    const wallet = getState().data.userWallet
+    const tokensRating = getState().data.tokensRating
+    const tokensAvailable = getState().data.availableTokens
+
+    const selectedTokens = tokensRating
+      .map(({symbol}) => tokensAvailable.find(item => item.symbol.toUpperCase() === symbol.toUpperCase()))
+      .filter(item => !!item)
+      .map(({symbol, address, decimals, ...item}) => {
+        return new Promise(resolve => {
+          if (symbol.toUpperCase() !== 'ETH') {
+            let contract = new web3.eth.Contract(erc20ABI, address)
+            contract.methods.balanceOf(wallet).call()
+              .then(response => {
+                const balance = new BigNumber(response).shiftedBy(-decimals).toString(10)
+                console.log(balance)
+
+                resolve({
+                  symbol,
+                  address,
+                  decimals,
+                  balance,
+                  ...item
+                })
+              })
+          } else {
+            window.ethereum
+              .request({
+                method: `eth_getBalance`,
+                params: [
+                  `${wallet}`,
+                  `latest`
+                ]
+              })
+              .then(response => {
+                const ethBalance = new BigNumber(response, 16).shiftedBy(-18).toString(10)
+                const balance = !isNaN(parseInt(`${ethBalance}`, 10))
+                  ? (+ethBalance).toFixed(4)
+                  : 0
+
+                resolve({
+                  symbol,
+                  address,
+                  decimals,
+                  balance,
+                  ...item
+                })
+              })
+          }
+        })
+      })
+
+    Promise.all(selectedTokens)
+      .then(unsortedList => {
+        const sortedList = unsortedList.sort((a, b) => {
+          if (a.balance > b.balance) return -1
+          if (a.balance === b.balance) return 0
+
+          return 1
+        })
+
+        const restList = tokensAvailable.filter(item => !sortedList.find(token => token.address === item.address))
+        console.log([].concat(sortedList, restList))
+        dispatch({
+          type: GET_AVAILABLE_TOKENS,
+          payload: [].concat(sortedList, restList)
+        })
+      })
+  }
+}
+
+
 export const  connectWallet = walletType => {
   return dispatch => {
     switch (walletType) {
-      case 'trustWallet': {
+      case 'walletconnect': {
         const provider = new WalletConnectProvider({
           infuraId: 'de5c2f90928c407c9c1801306277faee',
           rpc: {
@@ -108,6 +182,7 @@ export const  connectWallet = walletType => {
             dispatch(createWeb3Instance(provider))
             dispatch(toggleModal(false, null))
             dispatch(setButtonType(ActionButtonTypes.APPROVE))
+            dispatch(getSortedTokensList())
           })
         break
       }
@@ -136,6 +211,7 @@ export const  connectWallet = walletType => {
               dispatch(createWeb3Instance(window.ethereum))
               dispatch(toggleModal(false, null))
               dispatch(setButtonType(ActionButtonTypes.APPROVE))
+              dispatch(getSortedTokensList())
             })
             .catch(error => {
               if (error.code === 4001) {
@@ -154,6 +230,11 @@ export const  connectWallet = walletType => {
   }
 }
 
+export const saveTokensRating = list => ({
+  type: SAVE_TOKENS_RATING,
+  payload: list
+})
+
 export const getTokens = () => {
   return dispatch => {
     dispatch(setLoadingState(LoadingStates.TOKENS_LOADING))
@@ -162,6 +243,7 @@ export const getTokens = () => {
         const fetchedData = response?.data || {}
 
         dispatch(setLoadingState(LoadingStates.TOKENS_LOADED))
+        console.log(Object.values(fetchedData).length)
 
         dispatch({
           type: GET_AVAILABLE_TOKENS,
@@ -196,7 +278,7 @@ export const getExchangeEstimate = (amount, from, to) => {
       axiosBone.post('/exchange/estimate', data)
         .then(response => {
           dispatch(setLoadingState(LoadingStates.ESTIMATE_LOADED))
-          console.log(response.data)
+          // console.log(response.data)
 
           dispatch({
             type: GET_EXCHANGE_ESTIMATE,
@@ -217,7 +299,6 @@ export const saveSwapData = fetchedData => {
 
 export const approveTransaction = data => {
   return (dispatch, getState) => {
-    console.log(data)
     const userWallet = getState().data.userWallet
     const web3 = getState().data.web3
     const tokenInstance = new web3.eth.Contract(erc20ABI, data.source.value)
@@ -239,12 +320,18 @@ export const approveTransaction = data => {
     axiosBone.post('/exchange/swap', dataForWrapRequest)
       .then(response => {
         dispatch(setLoadingState(LoadingStates.ESTIMATE_LOADED))
-        const {to, gas, gasPrice, data} = response.data
+        const {
+          // to,
+          // gas,
+          gasPrice,
+          // data
+        } = response.data
         dispatch(saveSwapData(response.data))
 
         if (sourceSymbol !== 'ETH') {
           checkAllowance(userWallet, tokenInstance, selectedSource, amountToExchange, allowance => dispatch(getAllowance(allowance)))
             .then(allowanceStatus => {
+              console.log(allowanceStatus)
               return tokenApproveSequence({
                 allowanceStatus,
                 tokenInstance,
@@ -255,7 +342,12 @@ export const approveTransaction = data => {
             })
             .then(status => {
               console.log(`Status before swap: ${status}`)
-              dispatch(setButtonType(ActionButtonTypes.SWAP))
+
+              if (status) {
+                dispatch(setButtonType(ActionButtonTypes.SWAP))
+              } else {
+                console.log('CANCELLED!')
+              }
             })
         } else {
           dispatch(setButtonType(ActionButtonTypes.SWAP))
@@ -277,7 +369,7 @@ export const executeSwap = (sourceData) => {
     const dataToBeSent = {
       from: userWallet,
       to,
-      gas: `0x${(500000).toString(16)}`,
+      gas: `0x${(GAS_LIMIT_SWAP_ERC20).toString(16)}`,
       gasPrice: `${gasPrice.length > 1 ? gasPrice[1] * Math.pow(10, 9) : gasPrice[0] * Math.pow(10, 9)}`,
       data
     }
@@ -286,7 +378,7 @@ export const executeSwap = (sourceData) => {
       const dataToBeSent = {
         from: userWallet,
         to,
-        gas: `0x${(350000).toString(16)}`,
+        gas: `0x${(GAS_LIMIT_SWAP_ETH).toString(16)}`,
         gasPrice: `${gasPrice.length > 1 ? gasPrice[1] * Math.pow(10, 9) : gasPrice[0] * Math.pow(10, 9)}`,
         value: `0x${(+value).toString(16)}`,
         data
@@ -299,7 +391,7 @@ export const executeSwap = (sourceData) => {
           console.log(hash)
           localStorage.setItem('lastTransactionHash', hash)
         })
-        .catch(error => {
+        .catch(() => {
           console.log('error')
         })
 

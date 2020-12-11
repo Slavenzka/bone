@@ -7,7 +7,6 @@ export const HOME_PAGE = '/'
 export const pageLinks = [
   {
     label: 'Transactions history',
-    url: HOME_PAGE
   },
   {
     label: 'Buy Crypto',

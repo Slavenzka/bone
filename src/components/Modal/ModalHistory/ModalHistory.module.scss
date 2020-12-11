@@ -1,0 +1,109 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.wrapper {
+  :global {
+    .simplebar-vertical {
+      right: -1.5rem;
+      width: 0.8rem;
+    }
+
+    .simplebar-scrollbar.simplebar-visible::before {
+      background: $colorScrollbar;
+      opacity: 0.7;
+    }
+  }
+}
+
+.title {
+  max-height: 100vh;
+  overflow: hidden;
+}
+
+.title {
+  @include h1($colorLightest);
+
+  margin: 0;
+}
+
+.account {
+  @include fontWallet ($colorLightest);
+
+  display: flex;
+  flex-direction: column;
+  margin: 1.3rem 0 0 0;
+  padding: 0.5rem 2rem;
+  background-color: rgba(255, 255, 255, 0.1);
+
+  span {
+    margin-top: 0.2rem;
+  }
+}
+
+.skull {
+  display: block;
+  margin: 5rem auto 0 auto;
+  width: 10rem;
+}
+
+.list {
+  @include resetList;
+
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 2rem;
+}
+
+.item {
+  @include fontHint(400, $colorLight);
+
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 1rem 1rem 1rem 8rem;
+  background-color: rgba(255, 2555, 255, 0.05);
+
+  &:not(:first-child) {
+    margin-top: 0.2rem;
+  }
+
+  &.itemReceive {
+    background-color: rgba(132, 229, 198, 0.4);
+  }
+
+  &.itemSend {
+    background-color: rgba(234, 82, 111, 0.4);
+  }
+}
+
+.icon {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  width: 2.4rem;
+
+  &.iconReceive {
+    fill: rgb(132, 229, 198);
+  }
+
+  &.iconSend {
+    fill: rgb(234, 82, 111);
+  }
+}
+
+@media (max-width: $adaptiveMax) {
+  .wrapper {
+    .account {
+      font-size: 1rem;
+    }
+
+    .item {
+      padding-left: 6rem;
+    }
+
+    .icon {
+      top: 1.4rem;
+      width: 2rem;
+    }
+  }
+}

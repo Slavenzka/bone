@@ -5,6 +5,8 @@ import SimpleBar from 'simplebar-react'
 import { DeviceTypes } from 'utils/const'
 import axios from 'axios'
 import spinner from 'assets/images/Spinner.gif'
+import { useDispatch } from 'react-redux'
+import { saveTokensRating } from 'store/actions'
 
 const Summary = ({
   className,
@@ -12,6 +14,7 @@ const Summary = ({
 }) => {
   const [isFetching, updateFetchingStatus] = useState(false)
   const [fetchedData, updateFetchedData] = useState(null)
+  const dispatch = useDispatch()
 
   useEffect(() => {
 
@@ -29,11 +32,12 @@ const Summary = ({
         ))
 
         updateFetchedData(fetchedData)
+        dispatch(saveTokensRating(response.data.slice(0, 31).filter(item => item.id !== 'bitcoin')))
       })
-      .catch(error => {
+      .catch(() => {
         updateFetchingStatus(false)
       })
-  }, [])
+  }, [dispatch])
 
 
   const renderTable = () => (

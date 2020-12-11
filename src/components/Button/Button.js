@@ -6,7 +6,8 @@ import { Link } from 'react-router-dom'
 export const ButtonTypes = {
   BASIC: 'basic',
   BORDERED: 'bordered',
-  BURGER: 'burger'
+  BURGER: 'burger',
+  TEXT_ONLY: 'text-only'
 }
 
 const Button = ({
@@ -33,6 +34,7 @@ const Button = ({
       <button
         className={classnames(css.button, className, {
           [css.buttonBasic]: buttonStyle === ButtonTypes.BASIC,
+          [css.buttonText]: buttonStyle === ButtonTypes.TEXT_ONLY,
           [css.buttonBordered]: buttonStyle === ButtonTypes.BORDERED,
           [css.buttonBurger]: buttonStyle === ButtonTypes.BURGER
         })}

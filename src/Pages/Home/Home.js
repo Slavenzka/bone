@@ -4,9 +4,9 @@ import classnames from 'classnames'
 import Container from 'components/Grid/Container'
 import ContainerInner from 'components/Grid/ContainerInner'
 import Logo from 'components/Logo/Logo'
-import { DeviceTypes, LangOptions, Themes } from 'utils/const'
+import { DeviceTypes, Themes } from 'utils/const'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSystemGas, setLang, toggleModal } from 'store/actions'
+import { getSystemGas, toggleModal } from 'store/actions'
 import Heading from 'components/Heading/Heading'
 import ExchangeIntroForm from 'components/ExchangeIntroForm/ExchangeIntroForm'
 import Button, { ButtonTypes } from 'components/Button/Button'
@@ -14,26 +14,17 @@ import Summary from 'components/Summary/Summary'
 import Footer from 'components/Footer/Footer'
 // import Modal from 'components/Modal/Modal'
 import Navigation from 'components/Navigation/Navigation'
-import Select, { SelectStyleTypes } from 'components/Select/SelectStandard'
 import Modal from 'components/Modal/Modal'
-import axiosBone from 'axiosBone'
 
 const Home = () => {
   const summaryRef = useRef(null)
-  const lang = useSelector(state => state.ui.lang)
   const deviceType = useSelector(state => state.elastic.deviceType)
   const theme = useSelector(state => state.ui.theme)
   const userWallet = useSelector(state => state.data.userWallet)
   const gas = useSelector(state => state.data.systemGas)
   const dispatch = useDispatch()
-  const availableLangOptions = LangOptions
-    .filter(langOption => langOption.value !== lang.value)
 
   const createSummaryRef = node => summaryRef.current = node
-
-  const handleLangChange = evt => {
-    dispatch(setLang(evt))
-  }
 
   const handleBurgerClick = () => {
     dispatch(toggleModal(true, <Navigation />))
@@ -59,14 +50,14 @@ const Home = () => {
         <ContainerInner className={css.calculator}>
           <header className={css.header}>
             <Logo />
-            <Select
-              className={css.selectLang}
-              options={availableLangOptions}
-              value={lang}
-              defaultValue={lang}
-              onChange={handleLangChange}
-              type={SelectStyleTypes.LANG}
-            />
+            {/*<Select*/}
+            {/*  className={css.selectLang}*/}
+            {/*  options={availableLangOptions}*/}
+            {/*  value={lang}*/}
+            {/*  defaultValue={lang}*/}
+            {/*  onChange={handleLangChange}*/}
+            {/*  type={SelectStyleTypes.LANG}*/}
+            {/*/>*/}
             <p className={classnames(css.gas, {
               [css.gasVisible]: !!gas
             })}>
@@ -90,7 +81,7 @@ const Home = () => {
             }
           </header>
           <div className={css.content}>
-            <Heading label='Pick up your bones' />
+            <Heading label='Pick your bones' />
             {userWallet &&
               <p className={css.wallet}>
                 <span className={css.walletLabel}>

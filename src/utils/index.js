@@ -48,5 +48,23 @@ export const getGasFeeOptions = data => {
       isDefault: true,
     },
   ]
+}
 
+export const addLeadingZero = number =>
+  number < 10 ? `0${number}` : `${number}`
+
+export const formatDate = timestamp => {
+  const date = new Date(timestamp)
+
+  const day = addLeadingZero(date.getUTCDate())
+  const month = addLeadingZero(date.getUTCMonth() + 1)
+  const year = date.getUTCFullYear()
+
+  const hours = addLeadingZero(date.getUTCHours())
+  const minutes = addLeadingZero(date.getUTCMinutes())
+
+  return {
+    formattedDate: `${day}.${month}.${year}`,
+    formattedTime: `${hours}:${minutes}`,
+  }
 }

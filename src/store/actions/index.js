@@ -21,4 +21,5 @@ export {
   setGasFeeOptions,
   setGasFee,
   setPriceSlippage,
+  saveTokensRating
 } from './data'

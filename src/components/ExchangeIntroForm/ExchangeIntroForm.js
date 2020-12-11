@@ -20,6 +20,7 @@ import Preloader from 'components/Preloader/Preloader'
 import ModalSuccess from 'components/Modal/ModalSuccess/ModalSuccess'
 import ModalWallet from 'components/Modal/ModalWallet/ModalWallet'
 import { ActionButtonTypes } from 'utils/ActionButtonTypes'
+import SwapStructure from 'components/SwapStructure/SwapStructure'
 
 const DEBOUNCE_DELAY = 500
 const DEFAULT_FROM_TOKEN = 'USDT'
@@ -34,19 +35,6 @@ const ExchangeIntroForm = ({ className }) => {
   const loadingState = useSelector(state => state.data.loadingState)
   const userWallet = useSelector(state => state.data.userWallet)
   const tokens = useSelector(state => state.data.availableTokens)
-    // .filter(item => item.symbol !== 'ETH')
-    .sort((a, b) => {
-      if (
-        a.symbol !== 'DAI' &&
-        a.symbol !== 'USDT' &&
-        a.symbol !== 'USDC' &&
-        a.symbol !== 'BUSD' &&
-        a.symbol !== 'ETH'
-      ) {
-        return 1
-      }
-      return -1
-    })
     .map(({ symbol, name, address, decimals }) => ({
       label: symbol,
       value: address,
@@ -63,7 +51,7 @@ const ExchangeIntroForm = ({ className }) => {
       [`source-input`]: fromValue
     }
   })
-  const defaultSource = tokens.find(item => item.label === DEFAULT_FROM_TOKEN)
+  const defaultSource = tokens[0]
   const selectedSource = watch('source', defaultSource)
   const valueSource = watch('source-input') || DEFAULT_FROM_AMOUNT
   const debouncedSourceValue = useDebounce(valueSource, DEBOUNCE_DELAY)
@@ -97,7 +85,7 @@ const ExchangeIntroForm = ({ className }) => {
     }
 
     if (txData.transactionHash) {
-      console.log(reset)
+      console.log('RESET')
       dispatch(toggleModal(true, <ModalSuccess data={txData} />))
       dispatch(resetData())
       resetForm()
@@ -130,6 +118,7 @@ const ExchangeIntroForm = ({ className }) => {
             />
           }
         </div>
+        <SwapStructure />
         <button
           className={css.buttonCollapse}
           onClick={() => {

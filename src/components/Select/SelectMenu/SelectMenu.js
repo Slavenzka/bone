@@ -5,13 +5,13 @@ import { useSelector } from 'react-redux'
 
 const SelectMenu = ({ children }) => {
   const fontSize = useSelector(state => state.elastic.curFontSize)
-  const fontSizeScale = fontSize / 10
+  const fontSizeScale = fontSize > 10 ? 1 : fontSize / 10
 
   return (
     <div className={css.wrapper}>
       <ListWithScrollbar
         className={css.scrollbar}
-        listHeight={5 * 45 * fontSizeScale}
+        listHeight={3 * 45 * fontSizeScale}
         itemHeight={45 * fontSizeScale}
         itemCount={children.length}
       >

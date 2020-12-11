@@ -1,17 +1,18 @@
 import React from 'react'
 import css from './ModalWallet.module.scss'
 import Heading from 'components/Heading/Heading'
-import IconTrustWallet from 'assets/icons/IconTrustWallet'
 import IconMetamask from 'assets/icons/IconMetamask'
 import { connectWallet } from 'store/actions/data'
 import { useDispatch } from 'react-redux'
+import IconWalletConnect from 'assets/icons/IconWalletConnect'
+import classnames from 'classnames'
 
 const ModalWallet = () => {
   const wallets = [
     {
-      label: 'Trust wallet',
-      value: `trustWallet`,
-      icon: <IconTrustWallet className={css.icon} />,
+      label: 'Wallet Connect',
+      value: `walletconnect`,
+      icon: <IconWalletConnect className={classnames(css.icon, css.iconWallet)} />,
     },
     {
       label: 'Metamask',
@@ -43,6 +44,9 @@ const ModalWallet = () => {
                 type='button'
               >
                 {icon || <span>{ label }</span>}
+                {value === 'walletconnect' &&
+                  <span>{ label }</span>
+                }
               </button>
             </li>
           )

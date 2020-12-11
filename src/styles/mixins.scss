@@ -1,12 +1,12 @@
 @import "variables";
 
 // font mixins
-@mixin h1 {
+@mixin h1 ($color: $colorFontDarker1) {
   font-family: 'Roboto', Arial, sans-serif;
   font-size: 3rem;
   font-weight: 600;
   line-height: 3.9rem;
-  color: $colorFontDarker1;
+  color: $color;
 }
 
 @mixin fontLogo {
@@ -35,12 +35,12 @@
   color: $colorFontDarker3;
 }
 
-@mixin fontWallet {
+@mixin fontWallet ($color: $colorFontDarker2) {
   font-family: 'SF Pro Display', Arial, sans-serif;
   font-size: 1.2rem;
   font-weight: 300;
   line-height: 1.4rem;
-  color: $colorFontDarker2;
+  color: $color;
 }
 
 @mixin fontValue {
@@ -99,12 +99,12 @@
   color: $colorFontTotal;
 }
 
-@mixin fontNavigation {
+@mixin fontNavigation($color: $colorFontTotal) {
   font-family: 'Roboto', Arial, sans-serif;
   font-size: 1.3rem;
   font-weight: 400;
   line-height: 2.4rem;
-  color: $colorFontTotal;
+  color: $color;
 }
 
 @mixin fontTag {

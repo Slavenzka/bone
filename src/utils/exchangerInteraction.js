@@ -1,4 +1,4 @@
-import { exchangerAddress } from 'utils/const'
+import { exchangerAddress, GAS_LIMIT_APPROVAL } from 'utils/const'
 import BigNumber from 'bignumber.js'
 
 const AllowanceStatuses = {
@@ -43,9 +43,12 @@ export const checkAllowance = (userWallet, tokenInstance, selectedSource, amount
       console.log('Proceed to approve')
       return AllowanceStatuses.APPROVE
     })
+    .catch(() => {
+      console.log('error1')
+    })
 }
 
-const approveToken = ({ userWallet, tokenInstance, amountWithDecimals, gas = 100000, gasPrice }) => {
+const approveToken = ({ userWallet, tokenInstance, amountWithDecimals, gas = GAS_LIMIT_APPROVAL, gasPrice }) => {
   return tokenInstance.methods.approve(exchangerAddress, amountWithDecimals).send({
     from: userWallet,
     gas: `0x${(gas).toString(16)}`,
@@ -56,11 +59,14 @@ const approveToken = ({ userWallet, tokenInstance, amountWithDecimals, gas = 100
 
       return response.status
     })
+    .catch(() => {
+      console.log('error2')
+    })
 }
 
-export const tokenApproveSequence = ({ allowanceStatus, tokenInstance, amountWithDecimals, gas = 100000, gasPrice, userWallet }) => {
-  return new Promise((resolve, reject) => {
-    new Promise((resolveInner, rejectInner) =>{
+export const tokenApproveSequence = ({ allowanceStatus, tokenInstance, amountWithDecimals, gasPrice, userWallet }) => {
+  return new Promise((resolve) => {
+    new Promise((resolveInner) =>{
       if (allowanceStatus === AllowanceStatuses.RESET) {
         console.log('Resetting allowance')
         approveToken({

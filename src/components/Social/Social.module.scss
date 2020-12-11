@@ -31,6 +31,10 @@
   transition-duration: $transitionDuration;
 }
 
+.iconSmall {
+  width: 2.4rem;
+}
+
 .iconInner {
   fill: var(--colorBgAside);
   transition-duration: $transitionDuration;

@@ -1,15 +1,27 @@
 import {
   CLEAR_ALLOWANCE,
-  CONNECT_WALLET, CREATE_WEB3_INSTANCE, GET_ALLOWANCE,
-  GET_AVAILABLE_TOKENS, GET_EXCHANGE_ESTIMATE, GET_SYSTEM_GAS,
-  GET_WALLET_BALANCE, RESET_DATA, SAVE_SWAP_DATA, SAVE_TX_DATA, SET_GAS_FEE, SET_GAS_FEE_OPTIONS,
-  SET_LOADING_STATE, SET_PRICE_SLIPPAGE
+  CONNECT_WALLET,
+  CREATE_WEB3_INSTANCE,
+  GET_ALLOWANCE,
+  GET_AVAILABLE_TOKENS,
+  GET_EXCHANGE_ESTIMATE,
+  GET_SYSTEM_GAS,
+  GET_WALLET_BALANCE,
+  RESET_DATA,
+  SAVE_SWAP_DATA,
+  SAVE_TOKENS_RATING,
+  SAVE_TX_DATA,
+  SET_GAS_FEE,
+  SET_GAS_FEE_OPTIONS,
+  SET_LOADING_STATE,
+  SET_PRICE_SLIPPAGE
 } from 'store/actions/actionTypes'
 import { updateObject } from 'utils'
 
 const initialState = {
   loadingState: '',
   availableTokens: [],
+  tokensRating: null,
   userWallet: '',
   userBalance: 0,
   exchangeEstimate: {
@@ -23,7 +35,7 @@ const initialState = {
   systemGas: null,
   gasFeeOptions: [],
   selectedGasFee: null,
-  selectedPriceSlippage: null
+  selectedPriceSlippage: null,
 }
 
 export function dataReducer (state = initialState, action ) {
@@ -50,6 +62,7 @@ export function dataReducer (state = initialState, action ) {
     case SET_GAS_FEE_OPTIONS: return updateObject(state, { gasFeeOptions: action.payload })
     case SET_GAS_FEE: return updateObject(state, { selectedGasFee: action.payload })
     case SET_PRICE_SLIPPAGE: return updateObject(state, { selectedPriceSlippage: action.payload })
+    case SAVE_TOKENS_RATING: return updateObject(state, { tokensRating: action.payload })
     default: return state
   }
 }
