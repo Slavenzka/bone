@@ -11,7 +11,6 @@ import { ActionButtonTypes } from 'utils/ActionButtonTypes'
 const SettingsBlock = ({
   className,
   label,
-  hint,
   options,
   namespace,
   register,
@@ -31,7 +30,7 @@ const SettingsBlock = ({
       !isSlippage && dispatch(setGasFee(manualValue))
     }
     !isInitial && dispatch(setButtonType(ActionButtonTypes.APPROVE))
-  }, [manualValue])
+  }, [manualValue, dispatch, isInitial, namespace, setValue, isSlippage])
 
   useEffect(() => {
     if (selectedValue) {
@@ -39,7 +38,7 @@ const SettingsBlock = ({
       !isSlippage && dispatch(setGasFee(selectedValue))
     }
     !isInitial && dispatch(setButtonType(ActionButtonTypes.APPROVE))
-  }, [selectedValue])
+  }, [selectedValue, dispatch, isInitial, namespace, setValue, isSlippage])
 
   const items = options.map(({ label, value, isDefault }, index) => {
     return (
