@@ -24,7 +24,7 @@ const Calculator = ({
   const dispatch = useDispatch()
   const exchangeEstimate = useSelector(state => state.data.exchangeEstimate)
   const userBalance = useSelector(state => state.data.userBalance)
-  const { fromTokenAmount, toTokenAmount } = exchangeEstimate
+  const { toTokenAmount } = exchangeEstimate
 
   const renderIcon = isLoading => isLoading
     ? (
@@ -37,26 +37,17 @@ const Calculator = ({
 
   useEffect(() => {
     if (selectedSource && selectedResult) {
-      dispatch(getExchangeEstimate(valueSource, selectedSource.label, selectedResult.label))
+      dispatch(getExchangeEstimate(valueSource, selectedSource.value, selectedResult.value, selectedSource.decimals))
     }
   }, [dispatch, selectedSource, valueSource, selectedResult])
 
   return (
     <>
-      <button
-        className={css.buttonToggle}
-        onClick={handleClickToggle}
-        type='button'
-        disabled={isLoading}
-      >
-        Toggle currencies
-        { renderIcon(isLoading) }
-      </button>
       <InfoBlock
         className={css.item}
         namespace='source'
         options={supportedTokens}
-        amount={fromTokenAmount}
+        amount={valueSource}
         defaultCurrency={defaultSource}
         selectedCurrency={selectedSource}
         control={control}
@@ -70,6 +61,15 @@ const Calculator = ({
         isSource
         isLoading={isLoading}
       />
+      <button
+        className={css.buttonToggle}
+        onClick={handleClickToggle}
+        type='button'
+        disabled={isLoading}
+      >
+        Toggle currencies
+        { renderIcon(isLoading) }
+      </button>
       <InfoBlock
         className={css.item}
         namespace='result'
@@ -80,9 +80,9 @@ const Calculator = ({
         control={control}
         register={register}
         label='You get'
-        legend={ `Estimated transaction cost: $ 5.45` }
         setValue={setValue}
         getValues={getValues}
+        estimate={exchangeEstimate}
         isLoading={isLoading}
         isResult
         isInputDisabled

@@ -1,0 +1,94 @@
+@import "styles/variables";
+@import "styles/mixins";
+
+.wrapper {
+  height: 100%;
+
+  .message {
+    font-size: 2rem;
+    color: $colorLightest;
+  }
+
+  .skull {
+    display: block;
+    margin: 3rem auto 0 auto;
+    width: 5rem;
+  }
+
+  .profit {
+    @include fontMenu(500, $colorGold);
+
+    position: relative;
+    margin: 1rem 0;
+    padding: 0 0 0 4.5rem;
+
+    &::before {
+      content: "";
+      position: absolute;
+      top: -1rem;
+      left: 0;
+      width: 3rem;
+      height: 3rem;
+      background-image: url("../../../assets/icons/i_chest.svg");
+      background-size: cover;
+    }
+  }
+
+  .table {
+    margin-top: 2rem;
+    width: 100%;
+    border-collapse: collapse;
+
+    &:not(:first-of-type) {
+      margin-top: 3rem;
+    }
+
+    .heading {
+      @include fontMenu(600, $colorLightest);
+
+      margin: 0;
+      padding: 0.5rem 0;
+      color: white;
+      text-align: left;
+    }
+
+    .type {
+      @include fontMenu(400, $colorLightest);
+
+      margin: 0;
+      padding: 0.5rem 0;
+      color: white;
+      text-align: left;
+      opacity: 0.7;
+    }
+
+    .row {
+      &:not(:last-child) {
+        border-bottom: 0.2rem solid $colorBgDarkest;
+      }
+    }
+
+    .key,
+    .value {
+      @include fontMenu(400, $colorFontDarker2);
+
+      padding: 0.5rem;
+      background-color: $colorBgWallet;
+    }
+
+    .key {
+      border-right: 0.2rem solid $colorBgDarkest;
+    }
+  }
+
+  .button {
+    margin-top: 4rem;
+  }
+
+  :global {
+    .simplebar-track.simplebar-vertical {
+      right: -2rem;
+      width: 1rem;
+    }
+  }
+}

@@ -1,14 +1,21 @@
 import {
   CLEAR_ALLOWANCE,
   CONNECT_WALLET,
-  CREATE_WEB3_INSTANCE, GET_ALLOWANCE,
+  CREATE_WEB3_INSTANCE,
+  GET_ALLOWANCE,
   GET_AVAILABLE_TOKENS,
-  GET_EXCHANGE_ESTIMATE, GET_SYSTEM_GAS,
+  GET_EXCHANGE_ESTIMATE,
+  GET_SYSTEM_GAS,
   GET_WALLET_BALANCE,
   RESET_DATA,
-  SAVE_SWAP_DATA, SAVE_TOKENS_RATING,
-  SAVE_TX_DATA, SET_GAS_FEE, SET_GAS_FEE_OPTIONS,
-  SET_LOADING_STATE, SET_PRICE_SLIPPAGE,
+  SAVE_ETH_PRICE,
+  SAVE_SWAP_DATA,
+  SAVE_TX_DATA,
+  SAVE_TX_DETAILS_DATA,
+  SET_GAS_FEE,
+  SET_GAS_FEE_OPTIONS,
+  SET_LOADING_STATE,
+  SET_PRICE_SLIPPAGE,
 } from 'store/actions/actionTypes'
 import { setButtonType, toggleModal } from 'store/actions/ui'
 import React from 'react'
@@ -24,6 +31,7 @@ import axios from 'axios'
 import { miniABI } from 'components/ExchangeIntroForm/_assets/miniABI'
 import { getGasFeeOptions } from 'utils'
 import WalletConnectProvider from "@walletconnect/web3-provider"
+import { handleResponse } from 'utils/network'
 
 export const setLoadingState = newState => ({
   type: SET_LOADING_STATE,
@@ -184,6 +192,9 @@ export const  connectWallet = walletType => {
             dispatch(setButtonType(ActionButtonTypes.APPROVE))
             dispatch(getSortedTokensList())
           })
+          .catch(error => {
+            console.log(error)
+          })
         break
       }
       default:
@@ -230,24 +241,35 @@ export const  connectWallet = walletType => {
   }
 }
 
-export const saveTokensRating = list => ({
-  type: SAVE_TOKENS_RATING,
-  payload: list
-})
+export const saveEthPrice = () => {
+  return dispatch => {
+    axios.get(`https://api.coingecko.com/api/v3/coins/ethereum`)
+      .then(response => {
+        const price = response?.data?.market_data?.current_price?.usd
+
+        if (price && !Number.isNaN(+price)) {
+          dispatch({
+            type: SAVE_ETH_PRICE,
+            payload: price
+          })
+        }
+      })
+  }
+}
 
 export const getTokens = () => {
   return dispatch => {
     dispatch(setLoadingState(LoadingStates.TOKENS_LOADING))
-    axiosBone.get('/exchange/supported-tokens')
+    axios.get('https://api.1inch.exchange/v2.0/tokens')
       .then(response => {
         const fetchedData = response?.data || {}
 
         dispatch(setLoadingState(LoadingStates.TOKENS_LOADED))
-        console.log(Object.values(fetchedData).length)
+        console.log(Object.values(fetchedData.tokens))
 
         dispatch({
           type: GET_AVAILABLE_TOKENS,
-          payload: Object.values(fetchedData)
+          payload: Object.values(fetchedData.tokens)
         })
       })
       .catch(() => {
@@ -256,7 +278,7 @@ export const getTokens = () => {
   }
 }
 
-export const getExchangeEstimate = (amount, from, to) => {
+export const getExchangeEstimate = (amount, from, to, decimals) => {
   return (dispatch, getState) => {
     const loadingState = getState().data.loadingState
     const isLoading = loadingState === LoadingStates.ESTIMATE_LOADING || loadingState === LoadingStates.APPROVE_IN_PROCESS
@@ -269,23 +291,45 @@ export const getExchangeEstimate = (amount, from, to) => {
     if (!isLoading) {
       dispatch(setLoadingState(LoadingStates.ESTIMATE_LOADING))
 
-      const data = {
-        amount,
-        from,
-        to
-      }
-
-      axiosBone.post('/exchange/estimate', data)
+      axios.get(`https://api.1inch.exchange/v2.0/quote?fromTokenAddress=${from}&toTokenAddress=${to}&amount=${new BigNumber(amount * Math.pow(10, decimals)).toNumber()}`)
         .then(response => {
-          dispatch(setLoadingState(LoadingStates.ESTIMATE_LOADED))
-          // console.log(response.data)
+            dispatch(setLoadingState(LoadingStates.ESTIMATE_LOADED))
+            const fetchedData = response?.data
 
-          dispatch({
-            type: GET_EXCHANGE_ESTIMATE,
-            payload: response.data
+            if (fetchedData) {
+              const dataToSave = JSON.parse(JSON.stringify(fetchedData))
+              dataToSave.fromTokenAmount = (+fetchedData.fromTokenAmount / Math.pow(10, fetchedData.fromToken.decimals)).toFixed(4)
+              dataToSave.toTokenAmount = (+fetchedData.toTokenAmount / Math.pow(10, fetchedData.toToken.decimals)).toFixed(4)
+
+              dispatch({
+                type: GET_EXCHANGE_ESTIMATE,
+                payload: dataToSave
+              })
+            }
+
+            if (!fetchedData?.protocols || fetchedData.protocols.length === 0) {
+              dispatch(toggleModal(true, (
+                <ModalWarning
+                  title={`No available protocols found`}
+                  label={`Out system detected no available protocols for selected token pair. Please, change required tokens or try again later.`}
+                  handleClickRepeat={() => dispatch(toggleModal(false, null))}
+                  repeatLabel={`Back to selection`}
+                />
+              )))
+            }
+        })
+        .catch(error => {
+          dispatch(setLoadingState(LoadingStates.ESTIMATE_ERROR))
+
+          handleResponse({
+            error,
+            dispatch,
+            title: `Error while fetching exchange estimate`,
+            descriptor: `Exchange estimate is not available at moment. Please, try again later.`,
+            buttonLabel: `Back to exchange interface`,
+            handleClickButton: () => dispatch(toggleModal(false, null)),
           })
         })
-        .catch(() => dispatch(setLoadingState(LoadingStates.ESTIMATE_ERROR)))
     }
   }
 }
@@ -465,4 +509,11 @@ export const setGasFee = value => ({
 export const setPriceSlippage = value => ({
   type: SET_PRICE_SLIPPAGE,
   payload: value
+})
+
+export const saveTxDetailsData = (txHash, data) => ({
+  type: SAVE_TX_DETAILS_DATA,
+  payload: {
+    [txHash]: data
+  }
 })

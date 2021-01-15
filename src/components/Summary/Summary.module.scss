@@ -2,7 +2,21 @@
 @import "styles/mixins";
 
 .wrapper {
+  position: relative;
   padding-top: 5.5rem;
+}
+
+.empty {
+  position: absolute;
+  top: 5rem;
+  left: -14rem;
+  width: 40rem;
+  opacity: 0;
+  transition-duration: 1s;
+}
+
+.emptyVisible {
+  opacity: 0.7;
 }
 
 .total {
@@ -20,8 +34,11 @@
   }
 }
 
+.tableHeaders {
+  margin-top: 2rem;
+}
+
 .table {
-  margin-top: 2.2rem;
   width: 100%;
   color: white;
   border-collapse: collapse;
@@ -36,6 +53,26 @@
 .heading,
 .cell {
   text-align: left;
+
+  &:first-child {
+    width: 10%
+  }
+
+  &:nth-child(2) {
+    width: 30%;
+  }
+
+  &:nth-child(3) {
+    width: 25%;
+  }
+
+  &:nth-child(4) {
+    width: 25%;
+  }
+
+  &:nth-child(5) {
+    width: 10%;
+  }
 }
 
 .heading {
@@ -81,7 +118,7 @@
   display: flex;
   justify-content: center;
   padding: 0 1.5rem;
-  width: 8.5rem;
+  width: 10rem;
   line-height: 1.6rem;
   color: $colorLightest;
   background-color: $colorBgTag;
@@ -116,6 +153,55 @@
   display: block;
   margin: 5rem auto 0 auto;
   opacity: 0.5;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-block;
+  border-bottom: 1px dotted black; /* If you want dots under the hoverable text */
+  cursor: default;
+}
+
+/* Tooltip text */
+.tooltip > .tooltipText {
+  visibility: hidden;
+  width: 14rem;
+  background-color: black;
+  color: #fff;
+  text-align: center;
+  padding: 0.5rem 0;
+  border-radius: 6px;
+
+  /* Position the tooltip text - see examples below! */
+  position: absolute;
+  bottom: calc(100% + 1rem);
+  left: calc(50% - 12rem / 2);
+  z-index: 1;
+
+  &::before {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: calc(50% - 3rem / 2);
+    border-top: 1rem solid black;
+    border-right: 1.5rem solid transparent;
+    border-left: 1.5rem solid transparent;
+  }
+}
+
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltipText {
+  visibility: visible;
+}
+
+.buttonDetails {
+  @include resetButton;
+
+  .icon {
+    width: 2rem;
+    height: 1.4rem;
+    fill: $colorBgAux;
+  }
 }
 
 @media (max-width: $adaptiveMax) {

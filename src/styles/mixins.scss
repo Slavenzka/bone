@@ -67,12 +67,12 @@
   color: $color;
 }
 
-@mixin fontLabel {
+@mixin fontLabel($color: $colorFontDarker3) {
   font-family: 'Roboto', Arial, sans-serif;
   font-size: 1.4rem;
   font-weight: 400;
   line-height: 1.9rem;
-  color: $colorFontDarker3;
+  color: $color;
 }
 
 @mixin colorFontSelectable($color, $weight: 300) {

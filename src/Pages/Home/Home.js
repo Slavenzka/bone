@@ -6,7 +6,7 @@ import ContainerInner from 'components/Grid/ContainerInner'
 import Logo from 'components/Logo/Logo'
 import { DeviceTypes, Themes } from 'utils/const'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSystemGas, toggleModal } from 'store/actions'
+import { getSystemGas, saveEthPrice, toggleModal } from 'store/actions'
 import Heading from 'components/Heading/Heading'
 import ExchangeIntroForm from 'components/ExchangeIntroForm/ExchangeIntroForm'
 import Button, { ButtonTypes } from 'components/Button/Button'
@@ -42,6 +42,7 @@ const Home = () => {
 
   useEffect(() => {
     dispatch(getSystemGas())
+    dispatch(saveEthPrice())
   }, [dispatch])
 
   return (

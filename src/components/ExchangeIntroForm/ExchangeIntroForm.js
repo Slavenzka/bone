@@ -51,14 +51,12 @@ const ExchangeIntroForm = ({ className }) => {
       [`source-input`]: fromValue
     }
   })
-  const defaultSource = tokens[0]
+  const defaultSource = tokens.length > 0 ? tokens.find(item => item.label.toUpperCase() === 'USDT') : ''
   const selectedSource = watch('source', defaultSource)
   const valueSource = watch('source-input') || DEFAULT_FROM_AMOUNT
   const debouncedSourceValue = useDebounce(valueSource, DEBOUNCE_DELAY)
   const defaultResult = tokens.find(item => item.label === DEFAULT_TO_TOKEN)
   const selectedResult = watch('result', defaultResult) || {}
-  // const radioFee = watch('radio input gas-fee')
-  // const inputFee = watch('manual input gas-fee')
 
   const handleButtonClick = () => {
     dispatch(toggleModal(true, <ModalWallet />))

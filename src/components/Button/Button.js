@@ -1,7 +1,7 @@
 import React from 'react'
 import css from './Button.module.scss'
 import classnames from 'classnames'
-import { Link } from 'react-router-dom'
+import Link from '../../components/Link/Link'
 
 export const ButtonTypes = {
   BASIC: 'basic',
@@ -25,7 +25,7 @@ const Button = ({
           [css.buttonBasic]: buttonStyle === ButtonTypes.BASIC,
           [css.buttonBordered]: buttonStyle === ButtonTypes.BORDERED,
         })}
-        to={url}
+        link={url}
       >
         { label }
       </Link>

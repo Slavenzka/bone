@@ -9,7 +9,6 @@ import Input, { InputTypes } from 'components/Input/Input'
 import { useDispatch, useSelector } from 'react-redux'
 import { getWalletBalance } from 'store/actions/data'
 import SelectDropdown from 'components/SelectDropdown/SelectDropdown'
-import { GAS_LIMIT_APPROVAL, GAS_LIMIT_SWAP_ERC20 } from 'utils/const'
 
 const InfoBlock = ({
    className,
@@ -27,15 +26,15 @@ const InfoBlock = ({
    isInputDisabled,
    setValue,
    getValues,
+   estimate,
    isLoading,
    isResult,
-   isSource
+   isSource,
 }) => {
   const balanceCurrentToken = useSelector(state => state.data.userBalance)
   const gas = useSelector(state => state.data.systemGas)
   const wallet = useSelector(state => state.data.userWallet)
-  const tokensRating = useSelector(state => state.data.tokensRating) || []
-  const ethPrice = tokensRating.find(item => item.id === 'ethereum')?.[`current_price`]
+  const ethPrice = useSelector(state => state.data.ethPrice)
   const currency = selectedCurrency || defaultCurrency
   const filteredOptions = options.filter(item => item.value !== currency.value)
   const contentWrapperRef = useRef(null)
@@ -54,7 +53,8 @@ const InfoBlock = ({
     )
     : label
 
-  const transactionTotalCost = GAS_LIMIT_APPROVAL * gas / Math.pow(10, 9) + GAS_LIMIT_SWAP_ERC20 * gas / Math.pow(10, 9)
+  // const transactionTotalCost = GAS_LIMIT_APPROVAL * gas / Math.pow(10, 9) + GAS_LIMIT_SWAP_ERC20 * gas / Math.pow(10, 9)
+  const transactionTotalCost = estimate?.estimatedGas * gas / Math.pow(10, 9)
   const icon = <CurrencyLogo type={currency.value} />
 
   useEffect(() => {
@@ -96,6 +96,7 @@ const InfoBlock = ({
   }
 
   const createInputRef = node => inputRef.current = node
+  console.log(ethPrice)
 
   return (
     <div className={classnames(css.wrapper, className)}>

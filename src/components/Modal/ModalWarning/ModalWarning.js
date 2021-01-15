@@ -5,8 +5,16 @@ import Button from 'components/Button/Button'
 import { useDispatch } from 'react-redux'
 import { toggleModal } from 'store/actions'
 import ModalWallet from 'components/Modal/ModalWallet/ModalWallet'
+import Heading, { HeadingTypes } from 'components/Heading/Heading'
 
-const ModalWarning = ({ className, label, url, walletType }) => {
+const ModalWarning = ({
+  className,
+  title,
+  label,
+  url,
+  repeatLabel = `Choose wallet again`,
+  handleClickRepeat
+}) => {
   const dispatch = useDispatch()
 
   const handleClickConnectWallet = () => {
@@ -15,6 +23,14 @@ const ModalWarning = ({ className, label, url, walletType }) => {
 
   return (
     <div className={css.wrapper}>
+      {title &&
+        <Heading
+          tag='h3'
+          className={css.heading}
+          color={HeadingTypes.colors.LIGHTEST}
+          label={title}
+        />
+      }
       <p
         className={classnames(css.message, className)}
         dangerouslySetInnerHTML={{ __html: label }}
@@ -29,8 +45,8 @@ const ModalWarning = ({ className, label, url, walletType }) => {
       }
       <Button
         className={css.button}
-        label={ `Choose wallet again` }
-        onClick={handleClickConnectWallet}
+        label={repeatLabel}
+        onClick={handleClickRepeat || handleClickConnectWallet}
       />
     </div>
   )

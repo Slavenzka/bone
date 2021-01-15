@@ -9,8 +9,13 @@
   justify-content: center;
   text-align: center;
 
+  .heading {
+    margin-bottom: 2rem;
+    color: $colorLightest;
+  }
+
   .message {
-    @include fontLabel;
+    @include fontLabel($colorLightest);
 
     margin: 0;
     text-align: center;

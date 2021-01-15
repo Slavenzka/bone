@@ -4,6 +4,7 @@
 .wrapper {
   display: grid;
   grid-template-columns: 46.9rem 1fr;
+  grid-template-rows: minmax(100vh, auto);
 
   .themeLight {
     --colorBgAside: rgb(225, 216, 199);
@@ -97,7 +98,7 @@
   display: flex;
   flex-direction: column;
   width: 100%;
-  min-height: 100vh;
+  height: 100%;
   background-color: var(--colorBgAside);
   transition-duration: $transitionDuration;
 

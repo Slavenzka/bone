@@ -7,10 +7,10 @@ import {
   GET_EXCHANGE_ESTIMATE,
   GET_SYSTEM_GAS,
   GET_WALLET_BALANCE,
-  RESET_DATA,
+  RESET_DATA, SAVE_ETH_PRICE,
   SAVE_SWAP_DATA,
-  SAVE_TOKENS_RATING,
   SAVE_TX_DATA,
+  SAVE_TX_DETAILS_DATA,
   SET_GAS_FEE,
   SET_GAS_FEE_OPTIONS,
   SET_LOADING_STATE,
@@ -19,23 +19,24 @@ import {
 import { updateObject } from 'utils'
 
 const initialState = {
-  loadingState: '',
+  allowance: null,
   availableTokens: [],
-  tokensRating: null,
-  userWallet: '',
-  userBalance: 0,
+  ethPrice: null,
   exchangeEstimate: {
     fromTokenAmount: 1,
     toTokenAmount: 0,
   },
-  swapEstimate: null,
-  web3: null,
-  txData: null,
-  allowance: null,
-  systemGas: null,
   gasFeeOptions: [],
+  loadingState: '',
   selectedGasFee: null,
   selectedPriceSlippage: null,
+  swapEstimate: null,
+  systemGas: null,
+  txData: null,
+  txDetailsCash: {},
+  userBalance: 0,
+  userWallet: '',
+  web3: null,
 }
 
 export function dataReducer (state = initialState, action ) {
@@ -62,7 +63,10 @@ export function dataReducer (state = initialState, action ) {
     case SET_GAS_FEE_OPTIONS: return updateObject(state, { gasFeeOptions: action.payload })
     case SET_GAS_FEE: return updateObject(state, { selectedGasFee: action.payload })
     case SET_PRICE_SLIPPAGE: return updateObject(state, { selectedPriceSlippage: action.payload })
-    case SAVE_TOKENS_RATING: return updateObject(state, { tokensRating: action.payload })
+    case SAVE_ETH_PRICE: return updateObject(state, { ethPrice: action.payload })
+    case SAVE_TX_DETAILS_DATA: {
+      const updatedCash = updateObject(state.txDetailsCash, { ...action.payload })
+      return updateObject(state, { txDetailsCash: updatedCash })}
     default: return state
   }
 }

@@ -5,7 +5,7 @@ import Button from 'components/Button/Button'
 import { useDispatch } from 'react-redux'
 import { toggleModal } from 'store/actions'
 
-const ModalSuccess = ({ className, data }) => {
+const ModalSuccess = ({ className }) => {
   const dispatch = useDispatch()
 
   const handleClickConfirm = () => {

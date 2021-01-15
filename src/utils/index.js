@@ -68,3 +68,11 @@ export const formatDate = timestamp => {
     formattedTime: `${hours}:${minutes}`,
   }
 }
+
+export const formatNumbers = value => {
+  if (value > 999) {
+    return String(+value.toFixed(2)).replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1 ')
+  }
+
+  return value
+}

@@ -3,16 +3,18 @@
 
 .item {
   &:not(:first-child) {
-    margin-top: 3rem;
+    margin-top: 0;
   }
 }
 
 .buttonToggle {
   @include resetButton;
 
-  position: absolute;
-  top: calc(50% - 4rem / 2);
-  left: calc(50% - 3.5rem / 2);
+  //position: absolute;
+  //top: calc(50% - 4rem / 2);
+  //left: calc(50% - 3.5rem / 2);
+  display: block;
+  margin: 1rem auto 0 auto;
   width: 4rem;
   height: 4rem;
   background-color: $colorBgMain;

@@ -5,11 +5,11 @@ import classnames from 'classnames'
 
 const SwapStructure = () => {
   const estimation = useSelector(state => state.data.exchangeEstimate) || {}
-  const { exchanges } = estimation
+  const { protocols } = estimation
 
-  if (!exchanges || exchanges.length === 0) return null
+  if (!protocols || protocols.length === 0) return null
 
-  const renderExchanges = () => exchanges.map(({name, part}, index) => (
+  const renderExchanges = () => protocols[0][0].map(({name, part}, index) => (
     <li
       className={classnames(css.item, {
         [css.itemOdd]: index % 1 === 0
