@@ -254,6 +254,9 @@ export const saveEthPrice = () => {
           })
         }
       })
+      .catch(error => {
+        console.log(error)
+      })
   }
 }
 
@@ -351,17 +354,18 @@ export const approveTransaction = data => {
     const amountWithDecimals = new BigNumber(amountToExchange).shiftedBy(data.source.decimals).toFixed()
     const sourceSymbol = data.source.label
     const userSlippage = data[`manual input price-slippage`] || data[`radio input price-slippage`]
+    console.log(data.source)
 
-    const dataForWrapRequest = {
-      addressFrom: userWallet,
-      amount: Number((+amountToExchange).toFixed(4)),
-      from: data.source.label,
-      to: data.result.label,
+    const dataForApi = {
+      from: data.source.value,
+      to: data.result.value,
+      amount: new BigNumber(amountToExchange * Math.pow(10, data.source.decimals)).toNumber(),
+      fromAddress: userWallet,
       slippage: parseFloat(userSlippage).toFixed(2)
     }
 
     dispatch(setLoadingState(LoadingStates.ESTIMATE_LOADING))
-    axiosBone.post('/exchange/swap', dataForWrapRequest)
+    axios.get(`https://api.1inch.exchange/v2.0/swap?fromTokenAddress=${dataForApi.from}&toTokenAddress=${dataForApi.to}&amount=${dataForApi.amount}&fromAddress=${dataForApi.fromAddress}&slippage=${dataForApi.slippage}&disableEstimate=true`)
       .then(response => {
         dispatch(setLoadingState(LoadingStates.ESTIMATE_LOADED))
         const {
@@ -396,6 +400,15 @@ export const approveTransaction = data => {
         } else {
           dispatch(setButtonType(ActionButtonTypes.SWAP))
         }
+      })
+      .catch(error => {
+        handleResponse({
+          error,
+          dispatch,
+          title: `Tokens swap is not available`,
+          descriptor: `Please, try again later. We are working of restoration of service.`,
+          buttonLabel: `Go back`
+        })
       })
   }
 }
@@ -491,6 +504,9 @@ export const getSystemGas = () => {
             type: GET_SYSTEM_GAS,
             payload: gasPriceGwei
           })
+        })
+        .catch(error => {
+          console.log(error)
         })
     }
   }
